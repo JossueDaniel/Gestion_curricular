@@ -1,0 +1,14 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% block title %}Gestión del Syllabus{% endblock title %}
+
+{% block dashboard_content %}
+<p>Syllabus</p>
+{% for silabo in silabos %}
+<ul>
+    <li><a>{{ silabo }}</a></li>
+</ul>
+{% endfor %}
+<br>
+<a href="{% url 'silabo_new' %}">Agregar Syllabus</a>
+{% endblock dashboard_content %}

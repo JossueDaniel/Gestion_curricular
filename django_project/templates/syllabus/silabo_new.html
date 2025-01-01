@@ -1,0 +1,197 @@
+{% extends '_base.html' %}
+
+{% block title %}Nuevo syllabus{% endblock %}
+
+{% block content %}
+<div class="grid justify-items-center p-8">
+    <ul class="steps">
+        <li class="step step-info">Formulario Syllabus</li>
+        <li class="step">Contenido Programático</li>
+        <li class="step step-error" data-content="?">Completado</li>
+    </ul>
+</div>
+<div class="container mx-auto border my-6 rounded-lg p-10">
+    <form class="space-y-4" method="post">
+        {% csrf_token %}
+        <!--Sección información general-->
+        <div class="grid grid-rows gap-2">
+            <label>Código</label>
+            {{ form.codigo }}
+        </div>
+        <div class="grid grid-cols-2 gap-10">
+            <div class="grid grid-rows gap-2">
+                <label>Facultad</label>
+                {{ form.facultad }}
+            </div>
+            <div class="grid grid-rows gap-2">
+                <label>Carrera</label>
+                {{ form.carrera }}
+            </div>
+        </div>
+        <!--Sección Asignatura-->
+        <div class="space-y-4">
+            <h3>Asignatura</h3>
+            <div>
+                <div class="grid grid-rows gap-2">
+                    <label>Nombre</label>
+                    {{ form.asignatura }}
+                </div>
+            </div>
+            <div class="grid grid-cols-4 gap-4">
+                <div class="grid grid-rows gap-2">
+                    <label>Año académico</label>
+                    {{ form.anio_academico }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>Periodo académico</label>
+                    {{ form.periodo_academico }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>Fecha de inicio</label>
+                    {{ form.fecha_inicio }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>Fecha de finalización</label>
+                    {{ form.fecha_finalizacion }}
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="grid grid-rows gap-2">
+                    <label>Horario de clase</label>
+                    {{ form.horario_clase }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>Horas de tutorías</label>
+                    {{ form.horas_tutorias }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>Horario de tutorías</label>
+                    {{ form.horario_tutorias }}
+                </div>
+            </div>
+        </div>
+        <!--Sección Docente-->
+        <div class="space-y-4">
+            <h3>Información del Docente</h3>
+            <div>
+                <div class="grid grid-rows gap-2">
+                    <label>Docente</label>
+                    {{ form.docente }}
+                </div>
+            </div>
+        </div>
+        <!--Sección Caracterización de la asignatura-->
+        <div class="space-y-2">
+            <h3>Caracterización de la asignatura</h3>
+            <div class="grid">
+                {{ form.caracterizacion_asignatura }}
+            </div>
+        </div>
+        <!--Sección Objetivos-->
+        <div class="space-y-2">
+            <h3>Objetivos</h3>
+            <div class="grid">
+                {{ form.objetivos }}
+            </div>
+        </div>
+        <!--Sección Competencias Trasnversales o Genericas-->
+        <div class="space-y-2">
+            <h3>Competencias transversales o genéricas</h3>
+            <div class="grid">
+                {{ form.competencias_transversales }}
+            </div>
+        </div>
+        <!--Sección Competencias Profesionales-->
+        <div class="space-y-2">
+            <h3>Competencias profesionales</h3>
+            <div class="grid">
+                {{ form.competencias_profesionales }}
+            </div>
+        </div>
+        <!--Sección Metodología-->
+        <div class="space-y-2">
+            <h3>Metodología</h3>
+            <div class="grid">
+                {{ form.metodologia }}
+            </div>
+        </div>
+        <!--Sección Evaluación-->
+        <div class="space-y-2">
+            <h3>Evaluación</h3>
+            <div class="grid">
+                {{ form.evaluacion }}
+            </div>
+        </div>
+        <!--Sección Bibliografía-->
+        <div class="space-y-2">
+            <h3>Bibliografía</h3>
+            <div class="grid">
+                {{ form.bibliografia }}
+            </div>
+        </div>
+        <!--Sección Anexos-->
+        <div class="space-y-2">
+            <h3>Anexos</h3>
+            <div class="grid">
+                {{ form.anexos }}
+            </div>
+        </div>
+        <!--Cuadro Aportes-->
+        <div class="space-y-2">
+            {{ formset.management_form }}
+            <div class="p-4 grid grid-cols-3 gap-10">
+                {% for form in formset %}
+                <table class="border-separate border border-slate-500">
+                    <thead>
+                    <tr>
+                        <th class="border border-slate-600">Actividades</th>
+                        <th class="border border-slate-600">Aporte N° {{ forloop.counter}}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="border border-slate-700 pl-4">
+                            <ul>
+                                <li>Tareas</li>
+                                <li>Talleres</li>
+                                <li>Investigación</li>
+                                <li>Lecciones</li>
+                                <li>Pruebas</li>
+                                <li>Presentaciones</li>
+                            </ul>
+                        </td>
+                        <td class="border border-slate-700 text-center">
+                            {{ form.actividades }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-700 p-4">Examen Escrito u Oral</td>
+                        <td class="border border-slate-700 text-center p-1">
+                            {{ form.examen }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-700 p-4">Proyecto Final</td>
+                        <td class="border border-slate-700 text-center p-1">
+                            {{ form.proyecto_final }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-slate-700 p-4">Total</td>
+                        <td class="border border-slate-700 text-center p-1">
+                            {{ form.total }}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                {% for error in form.non_field_errors %}
+                <p class="text-red-500 text-sm">{{ error }}</p>
+                {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        <button type="submit" class="border border-black">Registrar Syllabus</button>
+    </form>
+
+</div>
+{% endblock content %}

@@ -1,0 +1,68 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% load static tailwind_tags %}
+
+
+{% block title %}Asignatura {{ asignatura.nombre }}{% endblock %}
+
+{% block dashboard_content %}
+<h2 class="font-bold text-lg">{{ asignatura }}</h2>
+<div class="grid grid-cols-2 gap-3 mt-2">
+    <div class="border rounded-md p-4">
+        <h3 class="font-semibold">Eje de Formación / Nivel de Organización Curricular</h3>
+        <p>{{ asignatura.eje_formacion }}</p>
+        <h3 class="font-semibold">Nivel Académico</h3>
+        <p> {{ asignatura.nivel_academico }}</p>
+        <h3 class="font-semibold">Créditos</h3>
+        <p>{{ asignatura.creditos }}</p>
+        <h3 class="font-semibold">Total de horas</h3>
+        <p>{{ asignatura.total_horas }}</p>
+    </div>
+    <div class="border rounded-md p-4 grid grid-rows-2">
+        <div>
+            <div class="grid grid-cols-4">
+                <div class="col-span3">
+                    <h3 class="font-semibold">Pre-Requisitos</h3>
+                </div>
+                <div class="badge badge-outline ">{{ pre_requisitos.count }}</div>
+            </div>
+            {% if pre_requisitos %}
+            <ul>
+                {% for pre_requisito in pre_requisitos %}
+                <li>
+                    <a href="{% url 'asignatura_detail' pre_requisito.pk %}"
+                       class="underline underline-offset-1 hover:text-sky-700">
+                        {{ pre_requisito }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No existen pre-requisitos para esta asignatura</p>
+            {% endif %}
+        </div>
+        <div>
+            <div class="grid grid-cols-4">
+                <div class="col-span3">
+                    <h3 class="font-semibold">Co-Requisitos</h3>
+                </div>
+                <div class="badge badge-outline ">{{ co_requisitos.count }}</div>
+            </div>
+            {% if co_requisitos %}
+            <ul>
+                {% for co_requisito in co_requisitos %}
+                <li>
+                    <a href="{% url 'asignatura_detail' co_requisito.pk %}"
+                       class="underline underline-offset-1 hover:text-sky-700">
+                        {{ co_requisito }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p>No existen co-requisitos para esta asignatura</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock dashboard_content %}

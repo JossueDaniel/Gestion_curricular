@@ -1,0 +1,14 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%; /* Asegura que el ancho del documento sea igual al ancho de la pantalla */
+    overflow-x: hidden; /* Oculta cualquier contenido que se salga del ancho de la pantalla */
+    box-sizing: border-box; /* Asegura que el cálculo del ancho incluya el padding y el borde */
+}
+
+.container {
+    max-width: 100%; /* Limita el ancho máximo al tamaño de la pantalla */
+    margin: 0 auto; /* Centra el contenido en el medio de la pantalla */
+    overflow: hidden; /* Evita el desbordamiento dentro de este contenedor */
+    padding: 1rem; /* Opcional: añade espacio interno */
+}

@@ -1,0 +1,53 @@
+{% load static tailwind_tags %}
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Gestión Syllabus{% endblock title %} | UNIBE</title>
+    {% tailwind_css %}
+    {% block extra_styles %}{% endblock %}
+</head>
+<body>
+<header>
+    <!-- Navbar -->
+    <div class="navbar bg-base-100 border-b px-8 py-4">
+        <div class="flex-1">
+            <a class="btn btn-ghost text-xl" href="/">UNIB.E</a>
+        </div>
+        <div class="flex-none">
+            <ul class="menu menu-horizontal px-1">
+                <li><a>Link</a></li>
+                <li class="w-36">
+                    <details>
+                        <summary>
+                            {% if user.is_authenticated %}
+                                {{ user }}
+                            {% endif %}
+                        </summary>
+                        <ul class="bg-base-100 rounded-t-none p-2">
+                            <li><a href="{% url 'login' %}">Mi perfil</a></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Cerrar sesión</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </details>
+                </li>
+            </ul>
+        </div>
+    </div>
+</header>
+<div>
+    {% block content %}
+    {% endblock content %}
+</div>
+{% block extra_scripts %}
+{% endblock %}
+
+</body>
+</html>

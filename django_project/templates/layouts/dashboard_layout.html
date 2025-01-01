@@ -1,0 +1,41 @@
+{% extends '_base.html' %}
+
+{% load static tailwind_tags %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="flex flex-row w-full">
+    <ul class="menu bg-base-200 w-56 h-lvh">
+        <li><a href="/">Tablero</a></li>
+        <li><a href="{% url 'asignaturas_list' %}">Asignaturas</a></li>
+        <li>
+            <details open>
+                <summary>Gestión Syllabus</summary>
+                <ul>
+                    <li><a href="{% url 'silabo_list' %}">Syllabus</a></li>
+                    <li><a>Submenu 2</a></li>
+                    <li>
+                        <details open>
+                            <summary>Parent</summary>
+                            <ul>
+                                <li><a>Submenu 1</a></li>
+                                <li><a>Submenu 2</a></li>
+                            </ul>
+                        </details>
+                    </li>
+                </ul>
+            </details>
+        </li>
+        <li><a>Item 3</a></li>
+    </ul>
+
+    <div class="container mx-auto flex-grow p-8">
+        <div>
+            {% block dashboard_content %}
+            {% endblock dashboard_content %}
+        </div>
+    </div>
+
+</div>
+{% endblock content %}

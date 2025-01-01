@@ -1,0 +1,37 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% load static tailwind_tags %}
+{% block dashboard_content %}
+<div class="w-full">
+    <h2 class="font-bold text-lg">Asignaturas</h2>
+    <br/>
+    <table class="border-collapse w-full table-auto p-12">
+        <thead>
+        <tr class="bg-slate-200">
+            <th class="border py-3">Código</th>
+            <th class="border py-3">Nombre</th>
+            <th class="border py-3">Nivel Académico</th>
+            <th class="border py-3">N° de créditos</th>
+            <th class="border py-3">Total de horas</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for asignatura in asignaturas_list %}
+        <tr class="text-center">
+            <td class="p-3">
+                <a href="{% url 'asignatura_detail' asignatura.pk %}"
+                   class="underline underline-offset-2 hover:text-sky-700">
+                    {{ asignatura.codigo }}
+                </a>
+            </td>
+            <td class="p-3">{{ asignatura.nombre }}</td>
+            <td class="p-3">{{ asignatura.nivel_academico }}</td>
+            <td class="p-3">{{ asignatura.creditos }}</td>
+            <td class="p-3">{{ asignatura.total_horas }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock dashboard_content %}
