@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, CreateView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, FormView
+from django.views.generic.detail import SingleObjectMixin
+from django.views import View
+from django.urls import reverse_lazy, reverse
 
 from .models import Silabo, Aporte
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
@@ -54,13 +57,42 @@ def registrar_silabo(request):
     })
 
 
-class SilaboDetailView(DetailView):
+class ContenidoGet(DetailView):
     model = Silabo
-    context_object_name = 'silabo'
     template_name = 'syllabus/silabo_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['form'] = ContenidoForm()
         context['contenidos'] = self.object.contenido_syllabus.all()
+        context['form'] = ContenidoForm()
         return context
+
+
+class ContenidoPost(SingleObjectMixin, FormView):
+    model = Silabo
+    form_class = ContenidoForm
+    template_name = 'syllabus/silabo_detail.html'
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().post(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        contenido = form.save(commit=False)
+        contenido.syllabus = self.object
+        contenido.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        silabo = self.get_object()
+        return reverse('silabo_detail', kwargs={'pk': silabo.pk})
+
+class SilaboDetailView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        view = ContenidoGet.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = ContenidoPost.as_view()
+        return view(request, *args, **kwargs)

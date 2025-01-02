@@ -124,3 +124,4 @@ class ContenidoForm(forms.ModelForm):
     class Meta:
         model = Contenido
         fields = '__all__'
+        exclude = ['syllabus']
