@@ -6,7 +6,7 @@
 <p>Syllabus</p>
 {% for silabo in silabos %}
 <ul>
-    <li><a>{{ silabo }}</a></li>
+    <li><a href="{% url 'silabo_detail' silabo.pk %}">{{ silabo }}</a></li>
 </ul>
 {% endfor %}
 <br>

@@ -1,0 +1,15 @@
+{% extends '_base.html' %}
+
+{% block title %}Nuevo syllabus{% endblock %}
+
+{% block content %}
+<h2>{{ silabo }}</h2>
+
+{% if contenidos %}
+{% for contenido in contenidos %}
+{{ contenido }}
+{% endfor %}
+{% else %}
+<p>No hay contenidos</p>
+{% endif %}
+{% endblock content %}

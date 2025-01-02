@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import modelformset_factory, inlineformset_factory
 
-from .models import Silabo, Aporte
+from .models import Silabo, Aporte, Contenido
 
 
 class SilaboForm(forms.ModelForm):
@@ -118,3 +118,9 @@ AporteFormSet = inlineformset_factory(
     validate_min=False,
     can_delete=False
 )
+
+
+class ContenidoForm(forms.ModelForm):
+    class Meta:
+        model = Contenido
+        fields = '__all__'
