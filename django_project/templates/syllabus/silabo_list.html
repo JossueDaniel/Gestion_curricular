@@ -1,14 +1,42 @@
 {% extends 'layouts/dashboard_layout.html' %}
 
-{% block title %}Gestión del Syllabus{% endblock title %}
-
+{% load static tailwind_tags %}
 {% block dashboard_content %}
-<p>Syllabus</p>
-{% for silabo in silabos %}
-<ul>
-    <li><a href="{% url 'silabo_detail' silabo.pk %}">{{ silabo }}</a></li>
-</ul>
-{% endfor %}
-<br>
-<a href="{% url 'silabo_new' %}">Agregar Syllabus</a>
+<div class="w-full">
+    <div class="grid grid-cols-2">
+        <h2 class="font-bold text-lg">Syllabus</h2>
+        <div class="justify-self-end">
+            <a class="btn btn-sm btn-success text-white" href="{% url 'silabo_new' %}">+ Nuevo</a>
+        </div>
+    </div>
+    <br/>
+    <table class="w-full table-auto p-12">
+        <thead>
+        <tr class="bg-slate-100">
+            <th class="border-b py-3">Asignatura</th>
+            <th class="border-b py-3">Facultad</th>
+            <th class="border-b py-3">Carrera</th>
+            <th class="border-b py-3">Fecha de creación</th>
+            <th class="border-b py-3">Fecha de actualización</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for silabo in silabos %}
+        <tr class="text-left odd:bg-white even:bg-slate-100">
+            <td class="p-3">
+                <a href="{% url 'silabo_detail' silabo.pk %}"
+                   class="underline underline-offset-2 hover:text-sky-700">
+                    {{ silabo }}
+                </a>
+            </td>
+            <td class="p-3">{{ silabo.facultad }}</td>
+            <td class="p-3">{{ silabo.carrera }}</td>
+            <td class="p-3">{{ silabo.fecha_creacion }}</td>
+            <td class="p-3">{{ silabo.fecha_actualizacion }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
 {% endblock dashboard_content %}

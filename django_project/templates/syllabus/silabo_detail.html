@@ -1,133 +1,92 @@
-{% extends '_base.html' %}
+{% extends 'layouts/dashboard_layout.html' %}
 
-{% block title %}Nuevo syllabus{% endblock %}
-
-{% block content %}
-<div class="grid justify-items-center p-8">
-    <ul class="steps">
-        <li class="step step-info">Formulario Syllabus</li>
-        <li class="step step-info">Contenido Programático</li>
-        <li class="step step-error" data-content="?">Completado</li>
-    </ul>
-</div>
-<div class="container mx-auto border my-6 rounded-lg p-10">
-    <p class="text-slate-500">{{ silabo }}</p>
-    <h2 class="text-center font-bold text-lg">Contenido Programático</h2>
-    <br/>
-    <table class="w-full">
-        <thead class="text-center font-bold">
-        <tr class="bg-slate-100">
-            <td class="border-b p-2">Semana</td>
-            <td class="border-b p-2">Unidad de Aprendizaje Temas y subtemas</td>
-            <td class="border-b p-2">Resultados de Aprendizaje</td>
-            <td class="border-b p-2">Evidencias de Aprendizaje</td>
-            <td class="border-b p-2">Observación</td>
-        </tr>
-        </thead>
-        <tbody>
-        {% if contenidos %}
-        {% for contenido in contenidos %}
-        <tr class="odd:bg-white even:bg-slate-100">
-            <td class="text-center p-2 font-semibold">{{ contenido.semana }}</td>
-            <td class="text-left p-2 text-slate-700">{{ contenido.contenido }}</td>
-            <td class="text-center p-2 text-slate-700">{{ contenido.resultados }}</td>
-            <td class="text-center p-2 text-slate-700">{{ contenido.evidencias }}</td>
-            {% if contenido.observacion %}
-            <td class="text-center p-2 text-slate-700">{{ contenido.observacion }}</td>
-            {% else %}
-            <td class="text-center p-2 text-slate-700"></td>
-            {% endif %}
-        </tr>
-        {% endfor %}
-        {% else %}
-        <tr>
-            <td>No hay contenidos</td>
-        </tr>
-        {% endif %}
-        </tbody>
-    </table>
-    <!-- Open the modal using ID.showModal() method -->
-    <br/>
-    <!-- You can open the modal using ID.showModal() method -->
-    <button class="btn" onclick="my_modal_4.showModal()">Agregar Contenido</button>
-    <dialog id="my_modal_4" class="modal">
-        <div class="modal-box w-11/12 max-w-5xl">
-            <h3 class="text-lg font-bold">{{ silabo }}</h3>
-            <form class="space-y-4 p-4" method="post">
-                {% csrf_token %}
-                <!--Sección Semanas-->
-                <div class="grid grid-rows gap-2">
-                    <label>Semana</label>
-                    {{ form.semana }}
-                </div>
-                <!--Sección Contenidos-->
-                <div class="space-y-2">
-                    <h3>Contenidos</h3>
-                    <div class="grid grid-rows gap-2">
-                        <label>Unidad de Aprendizaje Temas y Subtemas</label>
-                        {{ form.contenido }}
-                    </div>
-                </div>
-                <!--Sección Actividades-->
-                <div class="space-y-3">
-                    <h3>Actividades</h3>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="col-span-2 grid grid-rows gap-2">
-                            <label>Actividades con el docente</label>
-                            {{ form.actividades_docente }}
-                        </div>
-                        <div class="grid grid-rows gap-2">
-                            <label>N° Horas</label>
-                            {{ form.horas_docente }}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="col-span-2 grid grid-rows gap-2">
-                            <label>Actividades prácticas</label>
-                            {{ form.actividades_practicas }}
-                        </div>
-                        <div class="grid grid-rows gap-2">
-                            <label>N° Horas</label>
-                            {{ form.horas_practica }}
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-3 gap-4">
-                        <div class="col-span-2 grid grid-rows gap-2">
-                            <label>Actividades autónomas</label>
-                            {{ form.actividades_autonomas }}
-                        </div>
-                        <div class="grid grid-rows gap-2">
-                            <label>N° Horas</label>
-                            {{ form.horas_autonomas }}
-                        </div>
-                    </div>
-                </div>
-                <!--Sección Resultados y Evidencias-->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="grid grid-rows gap-2">
-                        <label>Resultados de Aprendizaje</label>
-                        {{ form.resultados }}
-                    </div>
-                    <div class="grid rows gap-2">
-                        <label>Evidencias de Aprendizajes</label>
-                        {{ form.evidencias }}
-                    </div>
-                </div>
-                <div class="space-y-3">
-                    <div class="grid grid-rows gap-2">
-                        <label>Observación</label>
-                        {{ form.observacion }}
-                    </div>
-                </div>
-                <button class="btn btn-success" type="submit">Agregar Contenido</button>
-            </form>
-            <div class="modal-action">
-                <form method="dialog">
-                    <!-- if there is a button, it will close the modal -->
-                    <button class="btn btn-error">Cancelar</button>
-                </form>
+{% load static tailwind_tags %}
+{% block dashboard_content %}
+<div class="w-full space-y-4">
+    <div class="grid grid-cols-2">
+        <h2 class="font-bold text-lg">{{ silabo }}</h2>
+    </div>
+    <!--Sección Información General-->
+    <div class="border rounded-lg space-y-3 p-4">
+        <h3 class="font-semibold">Información General</h3>
+        <div class="grid grid-cols-2">
+            <div>
+                <h4 class="font-semibold text-slate-700">Facultad</h4>
+                {{ silabo.facultad }}
+            </div>
+            <div>
+                <h4 class="font-semibold text-slate-700">Carrera</h4>
+                {{ silabo.carrera }}
             </div>
         </div>
-    </dialog>
+    </div>
+    <!--Sección Asignatura-->
+    <div>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="border rounded-lg p-4 space-y-3">
+                <div>
+                    <h4 class="font-semibold mb-2">Información Asignatura</h4>
+                    <a class="underline underline-offset-2 hover:text-sky-700"
+                       href="{% url 'asignatura_detail' silabo.asignatura.codigo %}">
+                        {{ silabo.asignatura }}
+                    </a>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-700">Año Académico</h4>
+                    <p>{{ silabo.anio_academico }}</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-700">Periodo Académico</h4>
+                    <p>{{ silabo.periodo_academico }}</p>
+                </div>
+            </div>
+            <div class="grid rows gap-4">
+                <div class="border rounded-lg p-4 grid grid-cols-2">
+                    <div>
+                        <h4 class="font-semibold text-slate-700">Fecha de Inicio</h4>
+                        <p>{{ silabo.fecha_inicio }}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-slate-700">Fecha de Finalización</h4>
+                        <p>{{ silabo.fecha_finalizacion }}</p>
+                    </div>
+                </div>
+                <div class="border rounded-lg p-4 grid grid-cols-2">
+                    <div>
+                        <h4 class="font-semibold text-slate-700">Horario de Clase</h4>
+                        <p>{{ silabo.horario_clase }}</p>
+                    </div>
+                    <div>
+                        {% if silabo.horas_tutorias %}
+                        <h4 class="font-semibold text-slate-700">Horas de Tutorías</h4>
+                        <p>{{ silabo.horas_tutorias }}</p>
+                        {% endif %}
+                        {% if silabo.horario_tutorias %}
+                        <h4 class="font-semibold text-slate-700">Horario de Tutorías</h4>
+                        <p>{{ silabo.horario_tutorias }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Sección Docente-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Información Docente</h3>
+        <div class="grid grid-cols-3 gap-4">
+            <div>
+                <h4 class="font-semibold text-slate-700">Apellidos y Nombres</h4>
+                <p>{{ silabo.docente }}</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-slate-700">Formación</h4>
+                <p>{{ silabo.docente.formacion }}</p>
+            </div>
+            <div>
+                <h4 class="font-semibold text-slate-700">Email Docente</h4>
+                <p>{{ silabo.docente.email }}</p>
+            </div>
+        </div>
+    </div>
 </div>
-{% endblock content %}
+{% endblock dashboard_content %}

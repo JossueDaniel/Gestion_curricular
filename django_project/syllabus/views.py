@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse
 
 from .models import Silabo, Aporte
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
@@ -59,7 +59,7 @@ def registrar_silabo(request):
 
 class ContenidoGet(DetailView):
     model = Silabo
-    template_name = 'syllabus/silabo_detail.html'
+    template_name = 'syllabus/contenido_new.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,7 +71,7 @@ class ContenidoGet(DetailView):
 class ContenidoPost(SingleObjectMixin, FormView):
     model = Silabo
     form_class = ContenidoForm
-    template_name = 'syllabus/silabo_detail.html'
+    template_name = 'syllabus/contenido_new.html'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -85,9 +85,9 @@ class ContenidoPost(SingleObjectMixin, FormView):
 
     def get_success_url(self):
         silabo = self.get_object()
-        return reverse('silabo_detail', kwargs={'pk': silabo.pk})
+        return reverse('contneido_new', kwargs={'pk': silabo.pk})
 
-class SilaboDetailView(LoginRequiredMixin, View):
+class ContenidoNewView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         view = ContenidoGet.as_view()
@@ -96,3 +96,9 @@ class SilaboDetailView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         view = ContenidoPost.as_view()
         return view(request, *args, **kwargs)
+
+
+class SilaboDetailView(LoginRequiredMixin, DetailView):
+    model = Silabo
+    context_object_name = 'silabo'
+    template_name = 'syllabus/silabo_detail.html'
