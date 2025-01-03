@@ -125,3 +125,45 @@ class ContenidoForm(forms.ModelForm):
         model = Contenido
         fields = '__all__'
         exclude = ['syllabus']
+        widgets = {
+            'semana': forms.NumberInput(attrs={
+                'class': 'form-input rounded-md w-16'
+            }),
+            'contenido': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+            'actividades_docente': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+            'horas_docente': forms.NumberInput(attrs={
+                'class': 'form-input rounded-md w-10',
+            }),
+            'actividades_practicas': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+            'horas_practica': forms.NumberInput(attrs={
+                'class': 'form-input rounded-md w-10',
+            }),
+            'actividades_autonomas': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+            'horas_autonomas': forms.NumberInput(attrs={
+                'class': 'form-input rounded-md w-10',
+            }),
+            'resultados': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+            'evidencias': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+            'observacion': forms.Textarea(attrs={
+                'class': 'form-textarea rounded-md',
+                'rows': 3,
+            }),
+        }
