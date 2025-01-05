@@ -1,0 +1,51 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% load static tailwind_tags %}
+{% block dashboard_content %}
+<div class="w-full space-y-4">
+    <div class="grid grid-cols-2">
+        <h2 class="font-bold text-lg">{{ silabo }}</h2>
+    </div>
+    <!--Sección Tabs-->
+    <div role="tablist" class="tabs tabs-boxed">
+        <a role="tab" class="tab" href="{% url 'silabo_detail' silabo.pk %}">Información General</a>
+        <a role="tab" class="tab bg-sky-800 text-white">Contenido Programático</a>
+    </div>
+    <!--Sección Tabla de Contenidos-->
+    <div class="border rounded-lg space-y-3 p-4">
+        <h3 class="font-semibold">Contenido Programátco</h3>
+        <table class="table-auto w-full">
+            <thead class="text-center">
+            <tr class="bg-slate-100 text-sm">
+                <th class="border-b py-3">Semana</th>
+                <th class="border-b py-3">Unidad de Aprendizaje Temas y Subtemas</th>
+                <th class="border-b py-3">Con el Docente</th>
+                <th class="border-b py-3">N° Horas</th>
+                <th class="border-b py-3">Prácticas</th>
+                <th class="border-b py-3">N° Horas</th>
+                <th class="border-b py-3">Autónomas</th>
+                <th class="border-b py-3">N° Horas</th>
+                <th class="border-b py-3">Resultados de Aprendizaje</th>
+                <th class="border-b py-3">Evidencias de Aprendizajes</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for contenido in contenidos %}
+            <tr>
+                <td class="p-3 border-b text-center">{{ contenido.semana }}</td>
+                <td class="p-3 border-b">{{ contenido.contenido }}</td>
+                <td class="p-3 border-b">{{ contenido.actividades_docente }}</td>
+                <td class="p-3 border-b text-center">{{ contenido.horas_docente }}</td>
+                <td class="p-3 border-b">{{ contenido.actividades_practicas }}</td>
+                <td class="p-3 border-b text-center">{{ contenido.horas_practica }}</td>
+                <td class="p-3 border-b">{{ contenido.actividades_autonomas }}</td>
+                <td class="p-3 border-b text-center">{{ contenido.horas_autonomas }}</td>
+                <td class="p-3 border-b">{{ contenido.resultados }}</td>
+                <td class="p-3 border-b">{{ contenido.evidencias }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock dashboard_content %}

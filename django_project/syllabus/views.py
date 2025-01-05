@@ -5,8 +5,9 @@ from django.views.generic import TemplateView, ListView, DetailView, FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
-from .models import Silabo, Aporte
+from .models import Silabo, Aporte, Contenido
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
 
 
@@ -108,4 +109,19 @@ class SilaboDetailView(LoginRequiredMixin, DetailView):
         silabo = self.get_object()
         aportes = Aporte.objects.filter(syllabus=silabo)
         context['aportes'] = aportes
+        return context
+
+
+class ContenidoListView(LoginRequiredMixin, ListView):
+    model = Contenido
+    context_object_name = 'contenidos'
+    template_name = 'contenido_list.html'
+
+    def get_queryset(self):
+        self.silabo = get_object_or_404(Silabo, id=self.kwargs['pk'])
+        return Contenido.objects.filter(syllabus=self.silabo)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['silabo'] = self.silabo
         return context

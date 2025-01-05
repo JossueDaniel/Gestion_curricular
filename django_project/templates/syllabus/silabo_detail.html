@@ -6,6 +6,11 @@
     <div class="grid grid-cols-2">
         <h2 class="font-bold text-lg">{{ silabo }}</h2>
     </div>
+    <!--Sección Tabs-->
+    <div role="tablist" class="tabs tabs-boxed">
+        <a role="tab" class="tab bg-sky-800 text-white">Información General</a>
+        <a role="tab" class="tab" href="{% url 'contenido_list' silabo.pk %}">Contenido Programático</a>
+    </div>
     <!--Sección Información General-->
     <div class="border rounded-lg space-y-3 p-4">
         <h3 class="font-semibold">Información General</h3>
@@ -170,7 +175,7 @@
         <h3 class="font-semibold">Bibliografía</h3>
         <div><p>{{ silabo.bibliografia }}</p></div>
     </div>
-<!--Sección Anexos-->
+    <!--Sección Anexos-->
     <div class="border rounded-lg p-4 space-y-3">
         <h3 class="font-semibold">Anexos</h3>
         <div><p>{{ silabo.anexos }}</p></div>
