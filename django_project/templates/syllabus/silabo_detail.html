@@ -88,5 +88,92 @@
             </div>
         </div>
     </div>
+    <!--Sección Caracterización de la asignatra-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Caracterización de la Asignatura</h3>
+        <div><p>{{ silabo.caracterizacion_asignatura }}</p></div>
+    </div>
+    <!--Sección Objetivos-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Objetivos</h3>
+        <div><p>{{ silabo.objetivos }}</p></div>
+    </div>
+    <!--Sección Competencias Transversales-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Competencias Transversales o Genéricas</h3>
+        <div><p>{{ silabo.competencias_transversales }}</p></div>
+    </div>
+    <!--Sección Competencias Profesionales-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Competencias Profesionales</h3>
+        <div><p>{{ silabo.competencias_profesionales }}</p></div>
+    </div>
+    <!--Sección Metodología-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Metodología</h3>
+        <div><p>{{ silabo.metodologia }}</p></div>
+    </div>
+    <!--Sección Procedimientos de Evaluación-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Procedimientos de Evaluación</h3>
+        <div><p>{{ silabo.evaluacion }}</p></div>
+        <div class="grid grid-cols-5">
+            <table class="col-start-2 col-span-3 table-auto">
+                <thead>
+                <tr class="bg-slate-100">
+                    <th class="border-b py-3">Actividades</th>
+                    {% for aporte in aportes %}
+                    <th class="border-b py-3">{{ aporte }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="p-3 border-b">
+                        <ul>
+                            <li>Tareas</li>
+                            <li>Talleres</li>
+                            <li>Investigación</li>
+                            <li>Lecciones</li>
+                            <li>Pruebas</li>
+                            <li>Presentaciones</li>
+                        </ul>
+                    </td>
+                    {% for aporte in aportes %}
+                    <td class="p-3 border-b text-center">{{ aporte.actividades }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="p-3 border-b">Examen Escrito u Oral</td>
+                    {% for aporte in aportes %}
+                    <td class="p-3 border-b text-center">{{ aporte.examen }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td class="p-3 border-b">Proyecto Final</td>
+                    {% for aporte in aportes %}
+                    <td class="p-3 border-b text-center">{{ aporte.proyecto_final }}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="bg-slate-100">
+                    <td class="p-3 border-b">Total</td>
+                    {% for aporte in aportes %}
+                    <td class="p-3 border-b text-center">{{ aporte.total }}</td>
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--Sección Bibliografía-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Bibliografía</h3>
+        <div><p>{{ silabo.bibliografia }}</p></div>
+    </div>
+<!--Sección Anexos-->
+    <div class="border rounded-lg p-4 space-y-3">
+        <h3 class="font-semibold">Anexos</h3>
+        <div><p>{{ silabo.anexos }}</p></div>
+    </div>
 </div>
 {% endblock dashboard_content %}

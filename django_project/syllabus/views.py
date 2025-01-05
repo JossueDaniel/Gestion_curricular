@@ -102,3 +102,10 @@ class SilaboDetailView(LoginRequiredMixin, DetailView):
     model = Silabo
     context_object_name = 'silabo'
     template_name = 'syllabus/silabo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        silabo = self.get_object()
+        aportes = Aporte.objects.filter(syllabus=silabo)
+        context['aportes'] = aportes
+        return context
