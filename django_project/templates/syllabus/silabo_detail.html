@@ -5,6 +5,11 @@
 <div class="w-full space-y-4">
     <div class="grid grid-cols-2">
         <h2 class="font-bold text-lg">{{ silabo }}</h2>
+        <div class="justify-self-end">
+            <a class="btn btn-sm btn-info text-white" href="{% url 'silabo_update' silabo.pk %}">
+                Editar
+            </a>
+        </div>
     </div>
     <!--Sección Tabs-->
     <div role="tablist" class="tabs tabs-boxed">

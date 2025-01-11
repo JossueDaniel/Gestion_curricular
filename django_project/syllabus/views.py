@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, DetailView, FormView
+from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
 from django.urls import reverse
@@ -58,6 +58,29 @@ def registrar_silabo(request):
     })
 
 
+def editar_silabo(request, pk):
+    silabo = get_object_or_404(Silabo, pk=pk)
+
+    if request.method == 'POST':
+        form = SilaboForm(request.POST, instance=silabo)
+        print("POST data:", request.POST)
+        if form.is_valid():
+            if not form.cleaned_data.get('fecha_inicio'):
+                form.instance.fecha_inicio = silabo.fecha_inicio
+            form.save()
+            return redirect('silabo_detail', pk=pk)
+        else:
+            print("Form errors:", form.errors)
+    else:
+        form = SilaboForm(instance=silabo)
+
+    return render(request, 'syllabus/silabo_update.html', {
+        'form': form,
+        'silabo': silabo,
+    })
+
+
+
 class ContenidoGet(DetailView):
     model = Silabo
     template_name = 'syllabus/contenido_new.html'
@@ -86,7 +109,8 @@ class ContenidoPost(SingleObjectMixin, FormView):
 
     def get_success_url(self):
         silabo = self.get_object()
-        return reverse('contneido_new', kwargs={'pk': silabo.pk})
+        return reverse('contenido_new', kwargs={'pk': silabo.pk})
+
 
 class ContenidoNewView(LoginRequiredMixin, View):
 
