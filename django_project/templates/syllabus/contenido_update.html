@@ -1,0 +1,91 @@
+{% extends '_base.html' %}
+
+{% block title %}Nuevo syllabus{% endblock %}
+
+{% block content %}
+<div class="grid justify-items-center p-8">
+    <ul class="steps">
+        <li class="step step-info">Formulario Syllabus</li>
+        <li class="step step-info">Contenido Programático</li>
+        <li class="step step-error" data-content="?">Completado</li>
+    </ul>
+</div>
+<div class="container mx-auto border my-6 rounded-lg p-10">
+    <p class="text-slate-500">{{ silabo }}</p>
+    <h2 class="text-center font-bold text-lg">Contenido Programático</h2>
+    <br/>
+    <!-- Open the modal using ID.showModal() method -->
+    <br/>
+    <h3 class="text-lg font-bold">{{ silabo }}</h3>
+    <form class="space-y-4 p-4" method="post">
+        {% csrf_token %}
+        <!--Sección Semanas-->
+        <div class="grid grid-rows gap-2">
+            <label>Semana</label>
+            {{ form.semana }}
+        </div>
+        <!--Sección Contenidos-->
+        <div class="space-y-2">
+            <h3>Contenidos</h3>
+            <div class="grid grid-rows gap-2">
+                <label>Unidad de Aprendizaje Temas y Subtemas</label>
+                {{ form.contenido }}
+            </div>
+        </div>
+        <!--Sección Actividades-->
+        <div class="space-y-3">
+            <h3>Actividades</h3>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="col-span-2 grid grid-rows gap-2">
+                    <label>Actividades con el docente</label>
+                    {{ form.actividades_docente }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>N° Horas</label>
+                    {{ form.horas_docente }}
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="col-span-2 grid grid-rows gap-2">
+                    <label>Actividades prácticas</label>
+                    {{ form.actividades_practicas }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>N° Horas</label>
+                    {{ form.horas_practica }}
+                </div>
+            </div>
+            <div class="grid grid-cols-3 gap-4">
+                <div class="col-span-2 grid grid-rows gap-2">
+                    <label>Actividades autónomas</label>
+                    {{ form.actividades_autonomas }}
+                </div>
+                <div class="grid grid-rows gap-2">
+                    <label>N° Horas</label>
+                    {{ form.horas_autonomas }}
+                </div>
+            </div>
+        </div>
+        <!--Sección Resultados y Evidencias-->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-rows gap-2">
+                <label>Resultados de Aprendizaje</label>
+                {{ form.resultados }}
+            </div>
+            <div class="grid rows gap-2">
+                <label>Evidencias de Aprendizajes</label>
+                {{ form.evidencias }}
+            </div>
+        </div>
+        <div class="space-y-3">
+            <div class="grid grid-rows gap-2">
+                <label>Observación</label>
+                {{ form.observacion }}
+            </div>
+        </div>
+        <div class="flex justify-end gap-4">
+            <button class="btn btn-success text-white" type="submit">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

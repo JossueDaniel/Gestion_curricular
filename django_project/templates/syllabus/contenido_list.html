@@ -27,6 +27,7 @@
                 <th class="border-b py-3">N° Horas</th>
                 <th class="border-b py-3">Resultados de Aprendizaje</th>
                 <th class="border-b py-3">Evidencias de Aprendizajes</th>
+                <th class="border-b py-3"></th>
             </tr>
             </thead>
             <tbody>
@@ -42,6 +43,15 @@
                 <td class="p-3 border-b text-center">{{ contenido.horas_autonomas }}</td>
                 <td class="p-3 border-b">{{ contenido.resultados }}</td>
                 <td class="p-3 border-b">{{ contenido.evidencias }}</td>
+                <td class="p-3 border-b font-bold">
+                    <div class="dropdown dropdown-end">
+                        <div tabindex="0" role="button" class="btn btn-xs m-1">...</div>
+                        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                            <li><a href="{% url 'contenido_update' contenido.pk %}">Editar</a></li>
+                            <li><a>Eliminar</a></li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
             </tbody>

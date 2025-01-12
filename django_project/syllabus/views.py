@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 
 from .models import Silabo, Aporte, Contenido
@@ -94,6 +94,18 @@ def editar_silabo(request, pk):
     })
 
 
+class SilaboDetailView(LoginRequiredMixin, DetailView):
+    model = Silabo
+    context_object_name = 'silabo'
+    template_name = 'syllabus/silabo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        silabo = self.get_object()
+        aportes = Aporte.objects.filter(syllabus=silabo)
+        context['aportes'] = aportes
+        return context
+
 
 class ContenidoGet(DetailView):
     model = Silabo
@@ -137,19 +149,6 @@ class ContenidoNewView(LoginRequiredMixin, View):
         return view(request, *args, **kwargs)
 
 
-class SilaboDetailView(LoginRequiredMixin, DetailView):
-    model = Silabo
-    context_object_name = 'silabo'
-    template_name = 'syllabus/silabo_detail.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        silabo = self.get_object()
-        aportes = Aporte.objects.filter(syllabus=silabo)
-        context['aportes'] = aportes
-        return context
-
-
 class ContenidoListView(LoginRequiredMixin, ListView):
     model = Contenido
     context_object_name = 'contenidos'
@@ -163,3 +162,13 @@ class ContenidoListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['silabo'] = self.silabo
         return context
+
+
+class ContenidoUpdateView(UpdateView):
+    model = Contenido
+    form_class = ContenidoForm
+    template_name = 'syllabus/contenido_update.html'
+
+    def get_success_url(self):
+        syllabus_pk = self.object.syllabus.pk
+        return reverse('contenido_list', kwargs={'pk': syllabus_pk})
