@@ -48,7 +48,7 @@
                         <div tabindex="0" role="button" class="btn btn-xs m-1">...</div>
                         <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                             <li><a href="{% url 'contenido_update' contenido.pk %}">Editar</a></li>
-                            <li><a>Eliminar</a></li>
+                            <li><a href="{% url 'contenido_delete' contenido.pk %}">Eliminar</a></li>
                         </ul>
                     </div>
                 </td>

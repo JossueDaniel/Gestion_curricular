@@ -1,21 +1,13 @@
 {% extends '_base.html' %}
 
-{% block title %}Nuevo syllabus{% endblock %}
+{% block title %}Editar Contenido{% endblock %}
 
 {% block content %}
-<div class="grid justify-items-center p-8">
-    <ul class="steps">
-        <li class="step step-info">Formulario Syllabus</li>
-        <li class="step step-info">Contenido Programático</li>
-        <li class="step step-error" data-content="?">Completado</li>
-    </ul>
-</div>
 <div class="container mx-auto border my-6 rounded-lg p-10">
     <p class="text-slate-500">{{ silabo }}</p>
     <h2 class="text-center font-bold text-lg">Contenido Programático</h2>
     <br/>
-    <!-- Open the modal using ID.showModal() method -->
-    <br/>
+
     <h3 class="text-lg font-bold">{{ silabo }}</h3>
     <form class="space-y-4 p-4" method="post">
         {% csrf_token %}

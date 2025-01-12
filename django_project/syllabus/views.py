@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
 from django.urls import reverse, reverse_lazy
@@ -172,3 +172,12 @@ class ContenidoUpdateView(UpdateView):
     def get_success_url(self):
         syllabus_pk = self.object.syllabus.pk
         return reverse('contenido_list', kwargs={'pk': syllabus_pk})
+
+
+class ContenidoDeleteView(DeleteView):
+    model = Contenido
+    template_name = 'syllabus/contenido_delete.html'
+
+    def get_success_url(self):
+        silabo = self.object.syllabus.pk
+        return reverse('contenido_list', kwargs={'pk': silabo})

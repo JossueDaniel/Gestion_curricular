@@ -7,7 +7,8 @@ from .views import (
     ContenidoNewView,
     SilaboDetailView,
     ContenidoListView,
-ContenidoUpdateView
+    ContenidoUpdateView,
+    ContenidoDeleteView
 )
 
 urlpatterns = [
@@ -19,4 +20,5 @@ urlpatterns = [
     path('syllabus/<int:pk>/', SilaboDetailView.as_view(), name='silabo_detail'),
     path('syllabus/<int:pk>/contenido/', ContenidoListView.as_view(), name='contenido_list'),
     path('syllabus/<int:pk>/contenido/edit/', ContenidoUpdateView.as_view(), name='contenido_update'),
+    path('syllabus/<int:pk>/contenido/delete/', ContenidoDeleteView.as_view(), name='contenido_delete'),
 ]
