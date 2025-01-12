@@ -6,8 +6,94 @@
 
 {% block dashboard_content %}
 <div class="w-full space-y-4">
-    <div class="grid grid-cols-2">
-        <h2 class="font-bold text-lg">{{ silabo }}</h2>
+    <div class="grid grid-cols-3">
+        <h2 class="font-bold text-lg col-span-2">{{ silabo }} - Contenido Programático</h2>
+        <div class="justify-self-end">
+            <!-- Open the modal using ID.showModal() method -->
+            <!-- You can open the modal using ID.showModal() method -->
+            <button class="btn btn-sm btn-success text-white" onclick="my_modal_4.showModal()">
+                + Agregar Contenido
+            </button>
+            <dialog id="my_modal_4" class="modal">
+                <div class="modal-box w-11/12 max-w-5xl">
+                    <h3 class="text-lg font-bold">{{ silabo }}</h3>
+                    <form class="space-y-4 p-4" method="post">
+                        {% csrf_token %}
+                        <!--Sección Semanas-->
+                        <div class="grid grid-rows gap-2">
+                            <label>Semana</label>
+                            {{ form.semana }}
+                        </div>
+                        <!--Sección Contenidos-->
+                        <div class="space-y-2">
+                            <h3>Contenidos</h3>
+                            <div class="grid grid-rows gap-2">
+                                <label>Unidad de Aprendizaje Temas y Subtemas</label>
+                                {{ form.contenido }}
+                            </div>
+                        </div>
+                        <!--Sección Actividades-->
+                        <div class="space-y-3">
+                            <h3>Actividades</h3>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="col-span-2 grid grid-rows gap-2">
+                                    <label>Actividades con el docente</label>
+                                    {{ form.actividades_docente }}
+                                </div>
+                                <div class="grid grid-rows gap-2">
+                                    <label>N° Horas</label>
+                                    {{ form.horas_docente }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="col-span-2 grid grid-rows gap-2">
+                                    <label>Actividades prácticas</label>
+                                    {{ form.actividades_practicas }}
+                                </div>
+                                <div class="grid grid-rows gap-2">
+                                    <label>N° Horas</label>
+                                    {{ form.horas_practica }}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4">
+                                <div class="col-span-2 grid grid-rows gap-2">
+                                    <label>Actividades autónomas</label>
+                                    {{ form.actividades_autonomas }}
+                                </div>
+                                <div class="grid grid-rows gap-2">
+                                    <label>N° Horas</label>
+                                    {{ form.horas_autonomas }}
+                                </div>
+                            </div>
+                        </div>
+                        <!--Sección Resultados y Evidencias-->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-rows gap-2">
+                                <label>Resultados de Aprendizaje</label>
+                                {{ form.resultados }}
+                            </div>
+                            <div class="grid rows gap-2">
+                                <label>Evidencias de Aprendizajes</label>
+                                {{ form.evidencias }}
+                            </div>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="grid grid-rows gap-2">
+                                <label>Observación</label>
+                                {{ form.observacion }}
+                            </div>
+                        </div>
+                        <button class="btn btn-success" type="submit">Agregar Contenido</button>
+                    </form>
+                    <div class="modal-action">
+                        <form method="dialog">
+                            <!-- if there is a button, it will close the modal -->
+                            <button class="btn btn-error">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </dialog>
+        </div>
     </div>
     <!--Sección Tabs-->
     <div role="tablist" class="tabs tabs-boxed">
@@ -15,50 +101,76 @@
         <a role="tab" class="tab bg-sky-800 text-white">Contenido Programático</a>
     </div>
     <!--Sección Tabla de Contenidos-->
+    {% if contenidos %}
+    {% for contenido in contenidos %}
     <div class="border rounded-lg space-y-3 p-4">
-        <h3 class="font-semibold">Contenido Programátco</h3>
-        <table class="table-auto w-full">
-            <thead class="text-center">
-            <tr class="bg-slate-100 text-sm">
-                <th class="border-b py-3">Semana</th>
-                <th class="border-b py-3">Unidad de Aprendizaje Temas y Subtemas</th>
-                <th class="border-b py-3">Con el Docente</th>
-                <th class="border-b py-3">N° Horas</th>
-                <th class="border-b py-3">Prácticas</th>
-                <th class="border-b py-3">N° Horas</th>
-                <th class="border-b py-3">Autónomas</th>
-                <th class="border-b py-3">N° Horas</th>
-                <th class="border-b py-3">Resultados de Aprendizaje</th>
-                <th class="border-b py-3">Evidencias de Aprendizajes</th>
-                <th class="border-b py-3"></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for contenido in contenidos %}
-            <tr>
-                <td class="p-3 border-b text-center">{{ contenido.semana }}</td>
-                <td class="p-3 border-b">{{ contenido.contenido }}</td>
-                <td class="p-3 border-b">{{ contenido.actividades_docente }}</td>
-                <td class="p-3 border-b text-center">{{ contenido.horas_docente }}</td>
-                <td class="p-3 border-b">{{ contenido.actividades_practicas }}</td>
-                <td class="p-3 border-b text-center">{{ contenido.horas_practica }}</td>
-                <td class="p-3 border-b">{{ contenido.actividades_autonomas }}</td>
-                <td class="p-3 border-b text-center">{{ contenido.horas_autonomas }}</td>
-                <td class="p-3 border-b">{{ contenido.resultados }}</td>
-                <td class="p-3 border-b">{{ contenido.evidencias }}</td>
-                <td class="p-3 border-b font-bold">
-                    <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-xs m-1">...</div>
-                        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                            <li><a href="{% url 'contenido_update' contenido.pk %}">Editar</a></li>
-                            <li><a href="{% url 'contenido_delete' contenido.pk %}">Eliminar</a></li>
-                        </ul>
+        <div class="grid grid-cols-2">
+            <h3 class="font-bold">Semana{{ contenido.semana }}</h3>
+            <div class="dropdown dropdown-end justify-self-end">
+                <div tabindex="0" role="button" class="btn btn-sm m-1">...</div>
+                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                    <li><a href="{% url 'contenido_update' contenido.pk %}">Editar</a></li>
+                    <li><a href="{% url 'contenido_delete' contenido.pk %}">Eliminar</a></li>
+                </ul>
+            </div>
+        </div>
+        <div>
+            <h4 class="font-semibold">Unidad de Aprendizaje Temas y Subtemas</h4>
+            <p>{{ contenido.contenido }}</p>
+        </div>
+        <div>
+            <h4 class="font-semibold">Actividades</h4>
+            <div class="grid grid-cols-3">
+                <div class="grid grid-cols-2">
+                    <div>
+                        <h4 class="font-semibold">Con el docente</h4>
+                        <p>{{ contenido.actividades_docente }}</p>
                     </div>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                    <div>
+                        <h4 class="font-semibold">N° Horas</h4>
+                        <p>{{ contenido.horas_docente }}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2">
+                    <div>
+                        <h4 class="font-semibold">Prácticas</h4>
+                        <p>{{ contenido.actividades_practicas }}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold">N° Horas</h4>
+                        <p>{{ contenido.horas_practica }}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2">
+                    <div>
+                        <h4 class="font-semibold">Autónomas</h4>
+                        <p>{{ contenido.actividades_autonomas }}</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold">N° Horas</h4>
+                        <p>{{ contenido.horas_autonomas }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4 class="font-semibold">Resultados de Aprendizaje</h4>
+            <p>{{ contenido.resultados }}</p>
+        </div>
+        <div>
+            <h4 class="font-semibold">Evidencias de Aprendizaje</h4>
+            <p>{{ contenido.evidencias }}</p>
+        </div>
+        {% if contenido.observacion %}
+        <div>
+            <h4 class="font-semibold">Observación</h4>
+            <p>{{ contenido.observacion }}</p>
+        </div>
+        {% endif %}
     </div>
+    {% endfor %}
+    {% else %}
+    <div class="border rounded-lg space-y-3 p-4">No hay contenidos semanales registrados</div>
+    {% endif %}
 </div>
 {% endblock dashboard_content %}

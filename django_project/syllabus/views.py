@@ -109,7 +109,7 @@ class SilaboDetailView(LoginRequiredMixin, DetailView):
 
 class ContenidoGet(DetailView):
     model = Silabo
-    template_name = 'syllabus/contenido_new.html'
+    template_name = 'syllabus/contenido_list.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -121,7 +121,7 @@ class ContenidoGet(DetailView):
 class ContenidoPost(SingleObjectMixin, FormView):
     model = Silabo
     form_class = ContenidoForm
-    template_name = 'syllabus/contenido_new.html'
+    template_name = 'syllabus/contenido_list.html'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -135,7 +135,7 @@ class ContenidoPost(SingleObjectMixin, FormView):
 
     def get_success_url(self):
         silabo = self.get_object()
-        return reverse('contenido_new', kwargs={'pk': silabo.pk})
+        return reverse('contenido_list', kwargs={'pk': silabo.pk})
 
 
 class ContenidoNewView(LoginRequiredMixin, View):
@@ -147,21 +147,6 @@ class ContenidoNewView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         view = ContenidoPost.as_view()
         return view(request, *args, **kwargs)
-
-
-class ContenidoListView(LoginRequiredMixin, ListView):
-    model = Contenido
-    context_object_name = 'contenidos'
-    template_name = 'contenido_list.html'
-
-    def get_queryset(self):
-        self.silabo = get_object_or_404(Silabo, id=self.kwargs['pk'])
-        return Contenido.objects.filter(syllabus=self.silabo)
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['silabo'] = self.silabo
-        return context
 
 
 class ContenidoUpdateView(UpdateView):

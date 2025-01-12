@@ -1881,10 +1881,6 @@ input.tab:checked + .tab-content,
     --btn-color: var(--fallback-a);
   }
 
-  .btn-neutral {
-    --btn-color: var(--fallback-n);
-  }
-
   .btn-info {
     --btn-color: var(--fallback-in);
   }
@@ -1946,10 +1942,6 @@ input.tab:checked + .tab-content,
     --btn-color: var(--a);
   }
 
-  .btn-neutral {
-    --btn-color: var(--n);
-  }
-
   .btn-info {
     --btn-color: var(--in);
   }
@@ -1967,12 +1959,6 @@ input.tab:checked + .tab-content,
   --tw-text-opacity: 1;
   color: var(--fallback-ac,oklch(var(--ac)/var(--tw-text-opacity)));
   outline-color: var(--fallback-a,oklch(var(--a)/1));
-}
-
-.btn-neutral {
-  --tw-text-opacity: 1;
-  color: var(--fallback-nc,oklch(var(--nc)/var(--tw-text-opacity)));
-  outline-color: var(--fallback-n,oklch(var(--n)/1));
 }
 
 .btn-info {
@@ -2989,6 +2975,10 @@ input.tab:checked + .tab-content,
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
 .grid-rows-2 {
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
@@ -3011,6 +3001,10 @@ input.tab:checked + .tab-content,
 
 .justify-center {
   justify-content: center;
+}
+
+.justify-items-end {
+  justify-items: end;
 }
 
 .justify-items-center {
@@ -3053,6 +3047,10 @@ input.tab:checked + .tab-content,
 
 .justify-self-end {
   justify-self: end;
+}
+
+.justify-self-center {
+  justify-self: center;
 }
 
 .rounded-box {
