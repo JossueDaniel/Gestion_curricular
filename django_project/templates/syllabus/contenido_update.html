@@ -1,6 +1,6 @@
 {% extends '_base.html' %}
 
-{% block title %}Editar Contenido{% endblock %}
+{% block title %}{{ contenido }}{% endblock %}
 
 {% block content %}
 <div class="container mx-auto border my-6 rounded-lg p-10">
@@ -76,6 +76,9 @@
             </div>
         </div>
         <div class="flex justify-end gap-4">
+            <a class="btn btn-error text-white" href="{% url 'contenido_list' contenido.syllabus.pk %}">
+                Cancelar
+            </a>
             <button class="btn btn-success text-white" type="submit">Guardar Cambios</button>
         </div>
     </form>
