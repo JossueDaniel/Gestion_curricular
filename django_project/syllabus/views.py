@@ -63,20 +63,34 @@ def editar_silabo(request, pk):
 
     if request.method == 'POST':
         form = SilaboForm(request.POST, instance=silabo)
-        print("POST data:", request.POST)
+        # formset = AporteFormSet(request.POST, instance=silabo)
+
         if form.is_valid():
-            if not form.cleaned_data.get('fecha_inicio'):
-                form.instance.fecha_inicio = silabo.fecha_inicio
+            silabo = form.save()
+            # for form in formset:
+            #     if form.cleaned_data():
+            #         aporte = form.save(commit=False)
+            #         aporte.syllabus = silabo
+            #         aporte_id = form.cleaned_data.get('id')
+            #         print('Apiorte id: ', aporte_id)
+            #         if aporte_id:
+            #             aporte.id = aporte_id
+            #         aporte.save()
             form.save()
+
             return redirect('silabo_detail', pk=pk)
         else:
             print("Form errors:", form.errors)
+            # print("Formset errors:", formset.errors)
     else:
         form = SilaboForm(instance=silabo)
+        # formset = AporteFormSet(instance=silabo)
+
 
     return render(request, 'syllabus/silabo_update.html', {
         'form': form,
         'silabo': silabo,
+        # 'formset': formset
     })
 
 

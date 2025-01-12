@@ -115,25 +115,12 @@
                 {{ form.evaluacion }}
             </div>
         </div>
-        <!--Sección Bibliografía-->
-        <div class="space-y-2">
-            <h3>Bibliografía</h3>
-            <div class="grid">
-                {{ form.bibliografia }}
-            </div>
-        </div>
-        <!--Sección Anexos-->
-        <div class="space-y-2">
-            <h3>Anexos</h3>
-            <div class="grid">
-                {{ form.anexos }}
-            </div>
-        </div>
         <!--Cuadro Aportes-->
         <div class="space-y-2">
             {{ formset.management_form }}
             <div class="p-4 grid grid-cols-3 gap-10">
                 {% for form in formset %}
+                {{ form.id.value }}
                 <table class="border-separate border border-slate-500">
                     <thead>
                     <tr>
@@ -181,6 +168,20 @@
                 <p class="text-red-500 text-sm">{{ error }}</p>
                 {% endfor %}
                 {% endfor %}
+            </div>
+        </div>
+        <!--Sección Bibliografía-->
+        <div class="space-y-2">
+            <h3>Bibliografía</h3>
+            <div class="grid">
+                {{ form.bibliografia }}
+            </div>
+        </div>
+        <!--Sección Anexos-->
+        <div class="space-y-2">
+            <h3>Anexos</h3>
+            <div class="grid">
+                {{ form.anexos }}
             </div>
         </div>
         <div class="flex justify-end gap-4">
