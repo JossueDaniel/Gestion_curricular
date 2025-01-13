@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
@@ -21,7 +22,7 @@ class SilaboListView(LoginRequiredMixin, ListView):
     context_object_name = 'silabos'
     template_name = 'syllabus/silabo_list.html'
 
-
+@login_required
 def registrar_silabo(request):
     if request.method == 'POST':
         form = SilaboForm(request.POST)
@@ -57,7 +58,7 @@ def registrar_silabo(request):
         'formset': formset,
     })
 
-
+@login_required
 def editar_silabo(request, pk):
     silabo = get_object_or_404(Silabo, pk=pk)
 
@@ -149,7 +150,7 @@ class ContenidoNewView(LoginRequiredMixin, View):
         return view(request, *args, **kwargs)
 
 
-class ContenidoUpdateView(UpdateView):
+class ContenidoUpdateView(LoginRequiredMixin, UpdateView):
     model = Contenido
     form_class = ContenidoForm
     template_name = 'syllabus/contenido_update.html'
@@ -159,7 +160,7 @@ class ContenidoUpdateView(UpdateView):
         return reverse('contenido_list', kwargs={'pk': syllabus_pk})
 
 
-class ContenidoDeleteView(DeleteView):
+class ContenidoDeleteView(LoginRequiredMixin, DeleteView):
     model = Contenido
     template_name = 'syllabus/contenido_delete.html'
 
