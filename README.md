@@ -9,7 +9,7 @@ respectivos.
 
 ## Estructura del proyecto
 ```plaintext
-django_apiBook/
+Gestion_curricular/
 ├── Dockerfile
 ├── compose.yml
 ├── requirements.txt
