@@ -1,0 +1,7 @@
+.env
+.gitignore
+.idea
+.venv
+./django_project/theme/static_src/node_modules/
+node_modules/
+django_project/db.sqlite3
