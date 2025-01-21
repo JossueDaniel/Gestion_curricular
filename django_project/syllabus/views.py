@@ -30,7 +30,9 @@ def registrar_silabo(request):
         if form.is_valid():
             try:
                 with transaction.atomic():
-                    silabo = form.save()
+                    silabo = form.save(commit=False)
+                    silabo.docente = request.user
+                    silabo.save()
                     formset = AporteFormSet(request.POST, instance=silabo)
 
                     if formset.is_valid():

@@ -15,7 +15,7 @@ class Silabo(models.Model):
         on_delete=models.CASCADE
     )
     anio_academico = models.PositiveIntegerField()
-    periodo_academico = models.CharField(max_length=10)
+    periodo_academico = models.CharField(max_length=20)
     fecha_inicio = models.DateField()
     fecha_finalizacion = models.DateField()
     horario_clase = models.CharField(max_length=50)

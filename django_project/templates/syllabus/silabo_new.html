@@ -70,16 +70,6 @@
                 </div>
             </div>
         </div>
-        <!--Sección Docente-->
-        <div class="space-y-4">
-            <h3>Información del Docente</h3>
-            <div>
-                <div class="grid grid-rows gap-2">
-                    <label>Docente</label>
-                    {{ form.docente }}
-                </div>
-            </div>
-        </div>
         <!--Sección Caracterización de la asignatura-->
         <div class="space-y-2">
             <h3>Caracterización de la asignatura</h3>
@@ -190,7 +180,10 @@
                 {% endfor %}
             </div>
         </div>
-        <button type="submit" class="border border-black">Registrar Syllabus</button>
+        <div class="flex justify-end gap-4">
+            <a class="btn btn-error text-white" href="{% url 'silabo_list' %}">Cancelar</a>
+            <button type="submit" class="btn btn-success text-white">Registrar</button>
+        </div>
     </form>
 
 </div>

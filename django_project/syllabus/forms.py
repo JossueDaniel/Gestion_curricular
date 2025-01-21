@@ -9,6 +9,7 @@ class SilaboForm(forms.ModelForm):
     class Meta:
         model = Silabo
         fields = '__all__'
+        exclude = ['docente']
         widgets = {
             'codigo': forms.TextInput(attrs={
                 'class': 'form-input rounded-md',
@@ -47,9 +48,6 @@ class SilaboForm(forms.ModelForm):
             }),
             'horario_tutorias': forms.TextInput(attrs={
                 'class': 'form-input rounded-md'
-            }),
-            'docente': forms.Select(attrs={
-                'class': 'form-select rounded-md'
             }),
             'caracterizacion_asignatura': forms.Textarea(attrs={
                 'class': 'form-textarea rounded-md',
