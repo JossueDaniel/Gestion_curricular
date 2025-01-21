@@ -2,6 +2,7 @@ from django import forms
 from django.forms import modelformset_factory, inlineformset_factory
 
 from .models import Silabo, Aporte, Contenido
+from asignaturas.models import Asignatura
 
 
 class SilaboForm(forms.ModelForm):
@@ -83,6 +84,14 @@ class SilaboForm(forms.ModelForm):
                 'rows': 3,
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(SilaboForm, self).__init__(*args, **kwargs)
+
+        if user:
+            self.fields['asignatura'].queryset = Asignatura.objects.filter(relacion_asignatura__docente__id=user)
+
 
 
 class AporteForm(forms.ModelForm):

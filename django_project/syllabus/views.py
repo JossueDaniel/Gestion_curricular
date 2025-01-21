@@ -25,7 +25,7 @@ class SilaboListView(LoginRequiredMixin, ListView):
 @login_required
 def registrar_silabo(request):
     if request.method == 'POST':
-        form = SilaboForm(request.POST)
+        form = SilaboForm(request.POST, user=request.user.id)
 
         if form.is_valid():
             try:
@@ -50,7 +50,7 @@ def registrar_silabo(request):
         else:
             formset = AporteFormSet(request.POST)
     else:
-        form = SilaboForm()
+        form = SilaboForm(user=request.user.id)
         formset = AporteFormSet()
 
     return render(request, 'syllabus/silabo_new.html', {
