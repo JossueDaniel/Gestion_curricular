@@ -83,12 +83,14 @@
                                 {{ form.observacion }}
                             </div>
                         </div>
-                        <button class="btn btn-success" type="submit">Agregar Contenido</button>
+                        <button type="submit" class="btn btn-success text-white">Agregar Contenido</button>
                     </form>
                     <div class="modal-action">
                         <form method="dialog">
                             <!-- if there is a button, it will close the modal -->
-                            <button class="btn btn-error">Cancelar</button>
+                            <div class="flex justify-end gap-4">
+                                <button class="btn btn-error text-white">Cancelar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -105,7 +107,7 @@
     {% for contenido in contenidos %}
     <div class="border rounded-lg space-y-3 p-4">
         <div class="grid grid-cols-2">
-            <h3 class="font-bold">Semana{{ contenido.semana }}</h3>
+            <h3 class="font-bold">Semana {{ contenido.semana }}</h3>
             <div class="dropdown dropdown-end justify-self-end">
                 <div tabindex="0" role="button" class="btn btn-sm m-1">...</div>
                 <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
