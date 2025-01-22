@@ -13,7 +13,9 @@ from .forms import SilaboForm, AporteFormSet, ContenidoForm
 
 
 # Create your views here.
-class HomePageView(LoginRequiredMixin, TemplateView):
+class HomePageView(LoginRequiredMixin, ListView):
+    model = Silabo
+    context_object_name = 'silabos'
     template_name = 'home.html'
 
 
