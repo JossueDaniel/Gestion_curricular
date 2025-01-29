@@ -171,3 +171,17 @@ class ContenidoDeleteView(LoginRequiredMixin, DeleteView):
     def get_success_url(self):
         silabo = self.object.syllabus.pk
         return reverse('contenido_list', kwargs={'pk': silabo})
+
+
+class ContenidoListView(ListView):
+    model = Contenido
+    context_object_name = 'contenidos'
+    template_name = 'contenido/contenido_list_seguimiento.html'
+
+    def get_queryset(self):
+        silabo = self.kwargs.get('pk')
+
+        if silabo:
+            return Contenido.objects.filter(syllabus=silabo).order_by('semana')
+        else:
+            return Contenido.objects.none()

@@ -3,20 +3,18 @@
 {% block title %}Inicio{% endblock %}
 
 {% block dashboard_content %}
-<h1 class="font-bold text-lg">Seguimiento de Syllabus</h1>
-
 <div class="flex items-center justify-center">
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         {% for silabo in silabos %}
         <!--Card -->
-        <div class="relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow-xl">
+        <div class="relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow-xl hover:drop-shadow-xl">
             <div class="avatar placeholder">
                 <div class="bg-neutral text-neutral-content w-12 rounded-full">
                     <span>AI</span>
                 </div>
             </div>
             <div class="mt-8">
-                <p class="text-xl font-semibold my-2">{{ silabo.asignatura.nombre }}</p>
+                <p class="text-xl font-semibold my-2"><a href="{% url 'contenido_list_tracking' silabo.pk %}">{{ silabo.asignatura.nombre }}</a></p>
                 <div class="flex space-x-2 text-gray-400 text-sm items-center">
                     <!-- svg  -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
