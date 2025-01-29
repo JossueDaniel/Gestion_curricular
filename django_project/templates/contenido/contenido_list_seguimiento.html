@@ -3,11 +3,34 @@
 {% block title %}Inicio{% endblock %}
 
 {% block dashboard_content %}
-<h1>Seguimiento de silabo</h1>
-<ul>
+<h2 class="font-bold text-lg">Seguimiento del syllabus</h2>
+<br/>
+<table class="w-full table-fixed p-12">
+    <thead>
+    <tr class="bg-slate-100 text-center">
+        <th class="border-b p-3 w-20">Semana</th>
+        <th class="border-b p-3 w-96">Unidad de Aprendizaje Temas y Subtemas</th>
+        <th class="border-b p-3">Resultados de aprendizaje</th>
+        <th class="border-b p-3">Evidencas de Aprendizaje</th>
+        <th class="border-b p-3 w-32">Completado</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for contenido in contenidos %}
-    <li>{{ contenido }}</li>
+    <tr class="text-base leading-6 border-b odd:bg-white even:bg-slate-100 hover:bg-base-300">
+        <td class="p-3 text-center">{{ contenido.semana }}</td>
+        <td class="p-3">{{ contenido.contenido }}</td>
+        <td class="p-3">{{ contenido.resultados }}</td>
+        <td class="p-3">{{ contenido.evidencias }}</td>
+        <td class="p-3">
+            <div class="form-control flex items-center justify-center"">
+                <label class="cursor-pointer label">
+                    <input type="checkbox" checked="checked" class="checkbox checkbox-success"/>
+                </label>
+            </div>
+        </td>
+    </tr>
     {% endfor %}
-</ul>
-
+    </tbody>
+</table>
 {% endblock dashboard_content %}
