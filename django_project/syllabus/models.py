@@ -61,6 +61,7 @@ class Contenido(models.Model):
     resultados = models.TextField()
     evidencias = models.TextField()
     observacion = models.TextField(null=True, blank=True)
+    completado = models.BooleanField(default=False)
 
     def __str__(self):
         return f'Actividades Semana {self.semana} - {self.syllabus}'

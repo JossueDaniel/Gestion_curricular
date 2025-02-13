@@ -24,6 +24,7 @@ class SilaboListView(LoginRequiredMixin, ListView):
     context_object_name = 'silabos'
     template_name = 'syllabus/silabo_list.html'
 
+
 @login_required
 def registrar_silabo(request):
     if request.method == 'POST':
@@ -62,6 +63,7 @@ def registrar_silabo(request):
         'formset': formset,
     })
 
+
 @login_required
 def editar_silabo(request, pk):
     silabo = get_object_or_404(Silabo, pk=pk)
@@ -90,7 +92,6 @@ def editar_silabo(request, pk):
     else:
         form = SilaboForm(instance=silabo)
         # formset = AporteFormSet(instance=silabo)
-
 
     return render(request, 'syllabus/silabo_update.html', {
         'form': form,
@@ -121,7 +122,6 @@ class ContenidoGet(DetailView):
         context['contenidos'] = self.object.contenido_syllabus.all().order_by('semana')
         context['form'] = ContenidoForm()
         return context
-
 
 
 class ContenidoPost(SingleObjectMixin, FormView):
@@ -186,3 +186,24 @@ class ContenidoListView(ListView):
             return Contenido.objects.filter(syllabus=silabo).order_by('semana')
         else:
             return Contenido.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        silabo_id = self.kwargs.get('pk')
+        context['silabo'] = get_object_or_404(Silabo, pk=silabo_id) if silabo_id else None
+        return context
+
+
+def registrar_completados(request, pk):
+    silabo_id = get_object_or_404(Silabo, pk=pk)
+    if request.method == 'POST':
+        seleccionados = request.POST.getlist('completados')
+        # Contenido.objects.all().update(completado=False)
+        Contenido.objects.filter(id__in=seleccionados).update(completado=True)
+
+        if seleccionados:
+            primer_contenido = get_object_or_404(Contenido, id=seleccionados[0])
+            silabo = primer_contenido.syllabus.pk
+            return redirect('contenido_list_tracking', pk=silabo)
+
+    return redirect('contenido_list_tracking', pk=silabo_id.id)

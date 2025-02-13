@@ -22,4 +22,5 @@ urlpatterns = [
     path('syllabus/<int:pk>/contenido/edit/', ContenidoUpdateView.as_view(), name='contenido_update'),
     path('syllabus/<int:pk>/contenido/delete/', ContenidoDeleteView.as_view(), name='contenido_delete'),
     path('syllabus/seguimiento/<int:pk>/', ContenidoListView.as_view(), name='contenido_list_tracking'),
+    path('syllabus/seguimiento/<int:pk>/registrar/contenido/', views.registrar_completados, name='guardar_completados'),
 ]
