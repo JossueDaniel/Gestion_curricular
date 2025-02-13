@@ -118,9 +118,10 @@ class ContenidoGet(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['contenidos'] = self.object.contenido_syllabus.all()
+        context['contenidos'] = self.object.contenido_syllabus.all().order_by('semana')
         context['form'] = ContenidoForm()
         return context
+
 
 
 class ContenidoPost(SingleObjectMixin, FormView):
