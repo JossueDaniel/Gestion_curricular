@@ -10,7 +10,7 @@
         <div class="relative bg-white py-6 px-6 rounded-3xl w-64 my-4 shadow-xl hover:drop-shadow-xl">
             <div class="avatar placeholder">
                 <div class="bg-neutral text-neutral-content w-12 rounded-full">
-                    <span>AI</span>
+                    <span>{{ forloop.counter }}</span>
                 </div>
             </div>
             <div class="mt-8">
@@ -50,8 +50,8 @@
                         </div>
                     </div>
                     <div class="my-2 p-1">
-                        <div class="radial-progress" style="--value:70;" role="progressbar">70%</div>
-
+                        <div class="radial-progress" style="--value:{{ silabo.progreso }};"
+                             role="progressbar">{{ silabo.progreso }}%</div>
                     </div>
                 </div>
             </div>

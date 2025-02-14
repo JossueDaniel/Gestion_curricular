@@ -18,6 +18,19 @@ class HomePageView(LoginRequiredMixin, ListView):
     context_object_name = 'silabos'
     template_name = 'home.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        for silabo in context['silabos']:
+            total_contenidos = Contenido.objects.filter(syllabus=silabo).count()
+            completados = Contenido.objects.filter(syllabus=silabo, completado=True).count()
+
+            # Calcular el progreso, evitando división por 0
+            progreso = int((completados / total_contenidos) * 100) if total_contenidos > 0 else 0
+            silabo.progreso = progreso
+
+        return context
+
 
 class SilaboListView(LoginRequiredMixin, ListView):
     model = Silabo
