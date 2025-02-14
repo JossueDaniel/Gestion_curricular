@@ -2,6 +2,13 @@
 
 {% block title %}Inicio{% endblock %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs text-sm text-slate-500">
+    <ul>
+        <li><a>Tablero</a></li>
+    </ul>
+</div>
+{% endblock %}
 {% block dashboard_content %}
 <div class="flex items-center justify-center">
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
@@ -14,7 +21,9 @@
                 </div>
             </div>
             <div class="mt-8">
-                <p class="text-xl font-semibold my-2"><a href="{% url 'contenido_list_tracking' silabo.pk %}">{{ silabo.asignatura.nombre }}</a></p>
+                <p class="text-xl font-semibold my-2">
+                    <a href="{% url 'contenido_list_tracking' silabo.pk %}">{{ silabo.asignatura.nombre }}</a>
+                </p>
                 <div class="flex space-x-2 text-gray-400 text-sm items-center">
                     <!-- svg  -->
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -51,7 +60,8 @@
                     </div>
                     <div class="my-2 p-1">
                         <div class="radial-progress" style="--value:{{ silabo.progreso }};"
-                             role="progressbar">{{ silabo.progreso }}%</div>
+                             role="progressbar">{{ silabo.progreso }}%
+                        </div>
                     </div>
                 </div>
             </div>

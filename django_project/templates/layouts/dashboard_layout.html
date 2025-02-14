@@ -20,6 +20,8 @@
     </ul>
 
     <div class="container mx-auto flex-grow p-8">
+        {% block breadcrumbs %}
+        {% endblock %}
         <div>
             {% block dashboard_content %}
             {% endblock dashboard_content %}
