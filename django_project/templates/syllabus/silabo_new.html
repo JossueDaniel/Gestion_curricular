@@ -3,14 +3,8 @@
 {% block title %}Nuevo syllabus{% endblock %}
 
 {% block content %}
-<div class="grid justify-items-center p-8">
-    <ul class="steps">
-        <li class="step step-info">Formulario Syllabus</li>
-        <li class="step">Contenido Programático</li>
-        <li class="step step-error" data-content="?">Completado</li>
-    </ul>
-</div>
 <div class="container mx-auto border my-6 rounded-lg p-10">
+    <h2 class="font-bold text-lg text-center">Formulario Syllabus</h2>
     <form class="space-y-4" method="post">
         {% csrf_token %}
         <!--Sección información general-->
