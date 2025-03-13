@@ -3,16 +3,15 @@ from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, FormView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
-from reportlab.pdfgen import canvas
 
 from .models import Silabo, Aporte, Contenido
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
-
+from .report_pdf import Report
 
 # Create your views here.
 class HomePageView(LoginRequiredMixin, ListView):
@@ -228,13 +227,7 @@ def generar_pdf(request, pk):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename=reporte_{silabo.asignatura.codigo}.pdf'
 
-    p = canvas.Canvas(response)
-
-    p.drawString(100, 800, f'Código: {silabo.codigo}')
-    p.drawString(100, 780, f'Facultad: {silabo.facultad}')
-    p.drawString(100, 760, f'Carrera: {silabo.carrera}')
-
-    p.showPage()
-    p.save()
+    pdf = Report(silabo)
+    pdf.generar_pdf(response)
 
     return response
