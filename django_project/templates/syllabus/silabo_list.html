@@ -4,6 +4,14 @@
 
 {% block title %}Syllabus{% endblock %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs text-sm text-slate-500">
+    <ul>
+        <li><a href="{% url 'silabo_list' %}">Syllabus</a></li>
+    </ul>
+</div>
+{% endblock %}
+
 {% block dashboard_content %}
 <div class="w-full">
     <div class="grid grid-cols-2 content-center">

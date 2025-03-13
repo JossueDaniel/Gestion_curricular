@@ -4,6 +4,14 @@
 
 {% block title %}Asignaturas{% endblock %}
 
+{% block breadcrumbs %}
+<div class="breadcrumbs text-sm text-slate-500">
+    <ul>
+        <li><a href="{% url 'asignaturas_list' %}">Asignaturas</a></li>
+    </ul>
+</div>
+{% endblock %}
+
 {% block dashboard_content %}
 <div class="w-full">
     <h2 class="font-bold text-lg">Asignaturas</h2>
