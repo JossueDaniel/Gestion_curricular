@@ -227,7 +227,19 @@ def generar_pdf(request, pk):
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename=reporte_{silabo.asignatura.codigo}.pdf'
 
-    pdf = Report(silabo)
+    pre_requisitos = silabo.asignatura.pre_requisitos.all()
+    nombres_pre_req = ' '
+    for pre_req in pre_requisitos:
+        nombres_pre_req += f'{pre_req.codigo} - {pre_req.nombre}' + '\n'
+
+    co_requisitos = silabo.asignatura.co_requisitos.all()
+    nombres_co_req = ' '
+    for co_req in co_requisitos:
+        nombres_co_req += f'{co_req.codigo} - {co_req.nombre}' + '\n'
+
+    user = request.user
+
+    pdf = Report(silabo, nombres_pre_req, nombres_co_req, user)
     pdf.generar_pdf(response)
 
     return response
