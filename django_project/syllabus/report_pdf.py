@@ -2,13 +2,13 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 
 import os
 
 
 class Report:
-    def __init__(self, objeto, pre_requisitos, co_requisitos, user):
+    def __init__(self, objeto, pre_requisitos, co_requisitos, user, aportes):
         self.objeto = objeto
         self.styles = getSampleStyleSheet()
         self.doc = None
@@ -16,6 +16,7 @@ class Report:
         self.pre_requisitos = pre_requisitos
         self.co_requisitos = co_requisitos
         self.user = user
+        self.aportes = aportes
 
     def generar_pdf(self, response):
         self.doc = SimpleDocTemplate(
@@ -99,7 +100,7 @@ class Report:
         )
 
         col_widths = [ table_width * 0.15, table_width * 0.15, table_width * 0.12, table_width * 0.18,
-                                  table_width * 0.10, table_width * 0.10, table_width * 0.20]
+                       table_width * 0.10, table_width * 0.10, table_width * 0.20]
 
         facultad_text = Paragraph(self.objeto.facultad, centered_style)
         carrera_text = Paragraph(self.objeto.carrera, centered_style)
@@ -189,8 +190,8 @@ class Report:
             ('GRID', (0, 0), (-1, -1), 1, colors.black)
         ]))
         self.elements.append(table)
-
         self.elements.append(Spacer(1, 15))
+        self._seccion_firmas()
 
     def _seccion_firmas(self):
         page_width = A4[0]
@@ -218,6 +219,82 @@ class Report:
         self.elements.append(table)
         self.elements.append(Spacer(1, 12))
 
+    def _seccion_detalles(self):
+        title_style = ParagraphStyle(
+            'TitleStyle',
+            parent=self.styles['Title'],
+            fontSize=10,
+            leading=10,
+            alignment=1,
+            textColor=colors.black,
+        )
+
+        self.elements.append(PageBreak())
+        self._agregar_header()
+        self.elements.append(Paragraph('CARACTERIZACIÓN DE LA ASIGNATURA', title_style))
+        self.elements.append(Paragraph(self.objeto.caracterizacion_asignatura))
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph('OBJETIVOS', title_style))
+        self.elements.append(Paragraph(self.objeto.objetivos))
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph('COMPETENCIAS TRANSVERSALES O GENÉRICAS', title_style))
+        self.elements.append(Paragraph(self.objeto.competencias_transversales))
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph('COMPETENCIAS PROFESIONALES', title_style))
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph(self.objeto.competencias_profesionales))
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph('METODOLOGÍA', title_style))
+        self.elements.append(Paragraph(self.objeto.metodologia))
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph('PROCEDIMIENTOS DE EVALUACIÓN', title_style))
+        self.elements.append(Paragraph(self.objeto.evaluacion))
+        self.elements.append(Spacer(1, 20))
+        self._tabla_evaluacion()
+        self.elements.append(Spacer(1, 20))
+        self.elements.append(Paragraph('BIBLIOGRAFÍA', title_style))
+        self.elements.append(Paragraph(self.objeto.bibliografia))
+        self.elements.append(Spacer(1, 20))
+
+
+    def _tabla_evaluacion(self):
+        page_width = A4[0]
+        margins = 40
+        table_width = page_width - margins
+        col_widths = [table_width * 0.30, table_width * 0.18, table_width * 0.18, table_width * 0.18]
+        fila_tareas = ['Tareas\nTalleres\nInvestigación\nLecciones\nPruebas\nPresentaciones']
+        fila_examen = ['Examen escrito u oral']
+        fila_documento = ['Documento final']
+        fila_total = ['TOTAL']
+
+        for aporte in self.aportes:
+            fila_tareas.append(f'{aporte.actividades}%')
+            fila_examen.append(f'{aporte.examen}%')
+            fila_documento.append(f'{aporte.proyecto_final}%')
+            fila_total.append(f'{aporte.total}%')
+
+        data = [
+            ['ACTIVIDADES', '1er. APORTE', '2do. APORTE', '3er. APORTE/FINAL'],
+            fila_tareas,
+            fila_examen,
+            fila_documento,
+            fila_total
+        ]
+
+        table = Table(data, colWidths=col_widths)
+        table.setStyle(TableStyle([
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
+            ('ALIGN', (0, 0), (0, -1), 'LEFT'),
+            ('ALIGN', (1, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTNAME', (0, 2), (0, -1), 'Helvetica-Bold'),
+            ('FONTNAME', (0, -1), (-1, -1), 'Helvetica-Bold'),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+        ]))
+
+        self.elements.append(table)
+
     def _agregar_tabla(self):
         data = [
             ['Facultad', self.objeto.facultad],
@@ -238,9 +315,9 @@ class Report:
         self.elements.append(table)
         self.elements.append(Spacer(1, 12))
 
-    def _crear_contenido(self, co_requisitos = ''):
+    def _crear_contenido(self):
         self._agregar_header()
         self._agregar_titulo()
         self._seccion_general()
-        self._seccion_firmas()
+        self._seccion_detalles()
         # self._agregar_tabla()

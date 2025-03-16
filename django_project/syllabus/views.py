@@ -238,8 +238,9 @@ def generar_pdf(request, pk):
         nombres_co_req += f'{co_req.codigo} - {co_req.nombre}' + '\n'
 
     user = request.user
+    aportes = silabo.aporte_syllabus.all()
 
-    pdf = Report(silabo, nombres_pre_req, nombres_co_req, user)
+    pdf = Report(silabo, nombres_pre_req, nombres_co_req, user, aportes)
     pdf.generar_pdf(response)
 
     return response
