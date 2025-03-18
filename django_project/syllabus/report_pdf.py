@@ -1,11 +1,10 @@
-from reportlab.lib.pagesizes import A4
+from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
-
-import os
-
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak, Frame, PageTemplate
+from reportlab.platypus.flowables import Flowable
+from reportlab.platypus.doctemplate import NextPageTemplate
 
 class Report:
     def __init__(self, objeto, pre_requisitos, co_requisitos, user, aportes):
@@ -17,6 +16,15 @@ class Report:
         self.co_requisitos = co_requisitos
         self.user = user
         self.aportes = aportes
+        self.is_horizontal = False
+        self.title_style = ParagraphStyle(
+            'TitleStyle',
+            parent=self.styles['Title'],
+            fontSize=10,
+            leading=10,
+            alignment=1,
+            textColor=colors.black,
+        )
 
     def generar_pdf(self, response):
         self.doc = SimpleDocTemplate(
@@ -27,8 +35,32 @@ class Report:
             topMargin=30,
             bottomMargin=30
         )
+
+        # Crear marcos para páginas verticales
+        frame_vertical = Frame(
+            self.doc.leftMargin,
+            self.doc.bottomMargin,
+            A4[0] - self.doc.leftMargin - self.doc.rightMargin,
+            A4[1] - self.doc.topMargin - self.doc.bottomMargin
+        )
+        # Crear marcos para páginas horizontales
+        landscape_width, landscape_height = landscape(A4)
+        frame_horizontal = Frame(
+            self.doc.leftMargin,
+            self.doc.bottomMargin,
+            landscape_width - self.doc.leftMargin - self.doc.rightMargin,
+            landscape_height - self.doc.topMargin - self.doc.bottomMargin
+        )
+
+        # Crear plantillas de página
+        vertical_template = PageTemplate(id='vertical', frames=frame_vertical, pagesize=A4)
+        horizontal_template = PageTemplate(id='horizontal', frames=frame_horizontal, pagesize=landscape(A4))
+
+        # Agregar plantillas al documento
+        self.doc.addPageTemplates([vertical_template, horizontal_template])
         self._crear_contenido()
         self.doc.build(self.elements)
+
 
     def _agregar_titulo(self):
         title_style = ParagraphStyle(
@@ -99,8 +131,8 @@ class Report:
             alignment=1  # 1 = Centrado
         )
 
-        col_widths = [ table_width * 0.15, table_width * 0.15, table_width * 0.12, table_width * 0.18,
-                       table_width * 0.10, table_width * 0.10, table_width * 0.20]
+        col_widths = [table_width * 0.15, table_width * 0.15, table_width * 0.12, table_width * 0.18,
+                      table_width * 0.10, table_width * 0.10, table_width * 0.20]
 
         facultad_text = Paragraph(self.objeto.facultad, centered_style)
         carrera_text = Paragraph(self.objeto.carrera, centered_style)
@@ -160,7 +192,7 @@ class Report:
         table.setStyle(TableStyle([
             ('SPAN', (1, 0), (2, 0)),
             ('SPAN', (4, 0), (-1, 0)),
-            ('SPAN', (0,1), (-1, 1)),
+            ('SPAN', (0, 1), (-1, 1)),
             ('SPAN', (0, 2), (1, 2)),
             ('SPAN', (0, 3), (1, 3)),
             ('SPAN', (5, 4), (-1, 4)),
@@ -211,51 +243,41 @@ class Report:
             ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('LINEABOVE', (0, 0), (-1, 0), 1 , colors.black),
-            ('LINEBEFORE', (0, 0), (0, -1), 1 , colors.black),
-            ('LINEAFTER', (-1, 0), (-1, -1), 1 , colors.black),
-            ('LINEBELOW', (0, -1), (-1, -1), 1 , colors.black),
+            ('LINEABOVE', (0, 0), (-1, 0), 1, colors.black),
+            ('LINEBEFORE', (0, 0), (0, -1), 1, colors.black),
+            ('LINEAFTER', (-1, 0), (-1, -1), 1, colors.black),
+            ('LINEBELOW', (0, -1), (-1, -1), 1, colors.black),
         ])))
         self.elements.append(table)
         self.elements.append(Spacer(1, 12))
 
     def _seccion_detalles(self):
-        title_style = ParagraphStyle(
-            'TitleStyle',
-            parent=self.styles['Title'],
-            fontSize=10,
-            leading=10,
-            alignment=1,
-            textColor=colors.black,
-        )
-
         self.elements.append(PageBreak())
         self._agregar_header()
-        self.elements.append(Paragraph('CARACTERIZACIÓN DE LA ASIGNATURA', title_style))
+        self.elements.append(Paragraph('CARACTERIZACIÓN DE LA ASIGNATURA', self.title_style))
         self.elements.append(Paragraph(self.objeto.caracterizacion_asignatura))
         self.elements.append(Spacer(1, 20))
-        self.elements.append(Paragraph('OBJETIVOS', title_style))
+        self.elements.append(Paragraph('OBJETIVOS', self.title_style))
         self.elements.append(Paragraph(self.objeto.objetivos))
         self.elements.append(Spacer(1, 20))
-        self.elements.append(Paragraph('COMPETENCIAS TRANSVERSALES O GENÉRICAS', title_style))
+        self.elements.append(Paragraph('COMPETENCIAS TRANSVERSALES O GENÉRICAS', self.title_style))
         self.elements.append(Paragraph(self.objeto.competencias_transversales))
         self.elements.append(Spacer(1, 20))
-        self.elements.append(Paragraph('COMPETENCIAS PROFESIONALES', title_style))
+        self.elements.append(Paragraph('COMPETENCIAS PROFESIONALES', self.title_style))
         self.elements.append(Spacer(1, 20))
         self.elements.append(Paragraph(self.objeto.competencias_profesionales))
         self.elements.append(Spacer(1, 20))
-        self.elements.append(Paragraph('METODOLOGÍA', title_style))
+        self.elements.append(Paragraph('METODOLOGÍA', self.title_style))
         self.elements.append(Paragraph(self.objeto.metodologia))
         self.elements.append(Spacer(1, 20))
-        self.elements.append(Paragraph('PROCEDIMIENTOS DE EVALUACIÓN', title_style))
+        self.elements.append(Paragraph('PROCEDIMIENTOS DE EVALUACIÓN', self.title_style))
         self.elements.append(Paragraph(self.objeto.evaluacion))
         self.elements.append(Spacer(1, 20))
         self._tabla_evaluacion()
         self.elements.append(Spacer(1, 20))
-        self.elements.append(Paragraph('BIBLIOGRAFÍA', title_style))
+        self.elements.append(Paragraph('BIBLIOGRAFÍA', self.title_style))
         self.elements.append(Paragraph(self.objeto.bibliografia))
         self.elements.append(Spacer(1, 20))
-
 
     def _tabla_evaluacion(self):
         page_width = A4[0]
@@ -295,6 +317,83 @@ class Report:
 
         self.elements.append(table)
 
+    def _seccion_cronograma(self):
+        self.elements.append(PageBreak())
+        self.elements.append(Paragraph('CONTENIDO PROGRAMÁTICO', self.title_style))
+        self.elements.append(Spacer(1, 12))
+
+        centered_style = ParagraphStyle(
+            "Centered",
+            fontSize=8,
+            leading=14,
+            alignment=1  # 1 = Centrado
+        )
+        landscape_width, landscape_height = landscape(A4)
+
+        # Definimos los márgenes
+        margins = 20  # 20 px de margen a cada lado
+
+        # Calculamos el ancho disponible para la tabla
+        table_width = landscape_width - (margins * 2)  # Restamos márgenes de ambos lados
+
+        # Por ejemplo, si queremos que la primera columna ocupe el 10% del ancho total
+        col_widths = [
+            table_width * 0.05,
+            table_width * .20,
+            table_width * 0.10,
+            table_width * 0.05,
+            table_width * 0.10,
+            table_width * 0.05,
+            table_width * 0.10,
+            table_width * 0.05,
+            table_width * .15,
+            table_width * .15,
+        ]
+
+        contenido_text = Paragraph('<b>UNIDAD DE APRENDIZAJE TEMAS Y SUBTEMAS</b>', centered_style)
+        horas_text = Paragraph('<b>N° HORAS</b>', centered_style)
+        resultados_text = Paragraph('<b>RESULTADOS DE APRENDIZAJE</b>', centered_style)
+        evidencias_text = Paragraph('<b>EVIDENCIAS DE APRENDIZAJE</b>', centered_style)
+
+        data = [
+            ['ACTIVIDADES'],
+            [
+                'SEMANA',
+                'CONTENIDOS',
+                'ACTIVIDADES',
+                '','', '', '', '',
+                resultados_text,
+                evidencias_text
+            ],
+            [
+                '',
+                contenido_text,
+                'CON EL DOCENTE',
+                horas_text,
+                'PRÁCTICAS',
+                horas_text,
+                'AUTÓNOMAS',
+                horas_text,
+                '', ''
+            ],
+        ]
+        table = Table(data, colWidths=col_widths)
+        table.setStyle(TableStyle([
+            ('SPAN', (0, 0), (-1, 0)),
+            ('SPAN', (2, 1), (7, 1)),
+            ('SPAN', (0, 1), (0, 2)),
+            ('SPAN', (-2, 1), (-2, 2)),
+            ('SPAN', (-1, 1), (-1, 2)),
+            ('ALIGN', (0, 0), (-1, 2), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('FONTNAME', (0, 0), (-1, 2), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 8),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ]))
+
+        self.elements.append(table)
+        self.elements.append((Spacer(1, 12)))
+
     def _agregar_tabla(self):
         data = [
             ['Facultad', self.objeto.facultad],
@@ -320,4 +419,6 @@ class Report:
         self._agregar_titulo()
         self._seccion_general()
         self._seccion_detalles()
+        self.elements.append(NextPageTemplate('horizontal'))
+        self._seccion_cronograma()
         # self._agregar_tabla()
