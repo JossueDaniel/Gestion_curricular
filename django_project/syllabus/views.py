@@ -239,8 +239,8 @@ def generar_pdf(request, pk):
 
     user = request.user
     aportes = silabo.aporte_syllabus.all()
-
-    pdf = Report(silabo, nombres_pre_req, nombres_co_req, user, aportes)
+    actividades = silabo.contenido_syllabus.all().order_by('semana')
+    pdf = Report(silabo, nombres_pre_req, nombres_co_req, user, aportes, actividades)
     pdf.generar_pdf(response)
 
     return response

@@ -7,7 +7,7 @@ from reportlab.platypus.flowables import Flowable
 from reportlab.platypus.doctemplate import NextPageTemplate
 
 class Report:
-    def __init__(self, objeto, pre_requisitos, co_requisitos, user, aportes):
+    def __init__(self, objeto, pre_requisitos, co_requisitos, user, aportes, actividades):
         self.objeto = objeto
         self.styles = getSampleStyleSheet()
         self.doc = None
@@ -16,7 +16,7 @@ class Report:
         self.co_requisitos = co_requisitos
         self.user = user
         self.aportes = aportes
-        self.is_horizontal = False
+        self.actividades = actividades
         self.title_style = ParagraphStyle(
             'TitleStyle',
             parent=self.styles['Title'],
@@ -328,6 +328,12 @@ class Report:
             leading=14,
             alignment=1  # 1 = Centrado
         )
+        justified_style = ParagraphStyle(
+            "Centered",
+            fontSize=8,
+            leading=14,
+            alignment=4  # 1 = Justificado
+        )
         landscape_width, landscape_height = landscape(A4)
 
         # Definimos los márgenes
@@ -356,7 +362,6 @@ class Report:
         evidencias_text = Paragraph('<b>EVIDENCIAS DE APRENDIZAJE</b>', centered_style)
 
         data = [
-            ['ACTIVIDADES'],
             [
                 'SEMANA',
                 'CONTENIDOS',
@@ -377,16 +382,35 @@ class Report:
                 '', ''
             ],
         ]
+        for actividad in self.actividades:
+            print(actividad.contenido)
+            data.append([
+                actividad.semana,
+                Paragraph(actividad.contenido, justified_style),
+                Paragraph(actividad.actividades_docente, justified_style),
+                actividad.horas_docente,
+                Paragraph(actividad.actividades_practicas, justified_style),
+                actividad.horas_practica,
+                Paragraph(actividad.actividades_autonomas, justified_style),
+                actividad.horas_autonomas,
+                Paragraph(actividad.resultados, justified_style),
+                Paragraph(actividad.evidencias, justified_style)
+            ])
+
         table = Table(data, colWidths=col_widths)
         table.setStyle(TableStyle([
-            ('SPAN', (0, 0), (-1, 0)),
-            ('SPAN', (2, 1), (7, 1)),
-            ('SPAN', (0, 1), (0, 2)),
-            ('SPAN', (-2, 1), (-2, 2)),
-            ('SPAN', (-1, 1), (-1, 2)),
-            ('ALIGN', (0, 0), (-1, 2), 'CENTER'),
+            ('SPAN', (2, 0), (7, 0)),
+            ('SPAN', (0, 0), (0, 1)),
+            ('SPAN', (-2, 0), (-2, 1)),
+            ('SPAN', (-1, 0), (-1, 1)),
+            ('ALIGN', (0, 0), (-1, 1), 'CENTER'),
+            ('ALIGN', (0, 0), (0, -1), 'CENTER'),
+            ('ALIGN', (3, 0), (3, -1), 'CENTER'),
+            ('ALIGN', (5, 0), (5, -1), 'CENTER'),
+            ('ALIGN', (7, 0), (7, -1), 'CENTER'),
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('FONTNAME', (0, 0), (-1, 2), 'Helvetica-Bold'),
+            ('FONTNAME', (0, 0), (-1, 1), 'Helvetica-Bold'),
+            ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
             ('GRID', (0, 0), (-1, -1), 1, colors.black),
         ]))
@@ -394,25 +418,12 @@ class Report:
         self.elements.append(table)
         self.elements.append((Spacer(1, 12)))
 
-    def _agregar_tabla(self):
-        data = [
-            ['Facultad', self.objeto.facultad],
-            ['Carrera', self.objeto.carrera],
-            ['Asignatura', self.objeto.asignatura],
-        ]
-        table = Table(data, colWidths=[120, 400])
-        table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor("#1E40AF")),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
-            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor("#F3F4F6")),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
-        ]))
-
-        self.elements.append(table)
-        self.elements.append(Spacer(1, 12))
+    def _seccion_anexos(self):
+        self.elements.append(PageBreak())
+        self._agregar_header()
+        self.elements.append(Paragraph('ANEXOS', self.title_style))
+        self.elements.append(Paragraph(self.objeto.anexos))
+        self.elements.append(Spacer(1, 20))
 
     def _crear_contenido(self):
         self._agregar_header()
@@ -421,4 +432,5 @@ class Report:
         self._seccion_detalles()
         self.elements.append(NextPageTemplate('horizontal'))
         self._seccion_cronograma()
-        # self._agregar_tabla()
+        self.elements.append(NextPageTemplate('vertical'))
+        self._seccion_anexos()
