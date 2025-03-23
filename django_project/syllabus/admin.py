@@ -15,7 +15,7 @@ class AporteInLine(admin.TabularInline):
     max_num = 3
 
 class SyllabusAdmin(admin.ModelAdmin):
-    list_display = ['asignatura', 'facultad', 'carrera', 'fecha_actualizacion', 'fecha_creacion']
+    list_display = ['asignatura', 'facultad', 'carrera', 'fecha_actualizacion', 'fecha_creacion', 'estado']
     inlines = [AporteInLine, ContenidoInLine]
 
 

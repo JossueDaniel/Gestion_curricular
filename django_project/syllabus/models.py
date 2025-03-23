@@ -37,6 +37,13 @@ class Silabo(models.Model):
     bibliografia = models.TextField()
     anexos = models.TextField(null=True, blank=True)
 
+    estados = [
+        ('aprobado', 'Aprobado'),
+        ('pendiente', 'Pendiente'),
+        ('rechazado', 'Rechazado'),
+    ]
+    estado = models.CharField(max_length=30, choices=estados, default='pendiente')
+
     def __str__(self):
         return f'Syllabus {self.asignatura}'
 

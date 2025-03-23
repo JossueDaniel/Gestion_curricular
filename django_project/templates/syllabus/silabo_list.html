@@ -29,6 +29,7 @@
             <th class="border-b py-3">Carrera</th>
             <th class="border-b py-3">Fecha de creación</th>
             <th class="border-b py-3">Fecha de actualización</th>
+            <th class="border-b py-3">Estado</th>
         </tr>
         </thead>
         <tbody>
@@ -44,6 +45,15 @@
             <td class="p-3">{{ silabo.carrera }}</td>
             <td class="p-3">{{ silabo.fecha_creacion }}</td>
             <td class="p-3">{{ silabo.fecha_actualizacion }}</td>
+            <td class="p-3">
+                {% if silabo.estado == 'aprobado' %}
+                <div class="badge badge-lg badge-outline badge-success">Aprobado</div>
+                {% elif silabo.estado == 'pendiente' %}
+                <div class="badge badge-lg badge-outline badge-info">Pendiente</div>
+                {% elif silabo.estado == 'rechazado' %}
+                <div class="badge badge-lg badge-outline badge-error">Rechazado</div>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
         </tbody>
