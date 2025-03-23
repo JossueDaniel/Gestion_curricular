@@ -6,6 +6,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.platypus.flowables import Flowable
 from reportlab.platypus.doctemplate import NextPageTemplate
 
+
 class Report:
     def __init__(self, objeto, pre_requisitos, co_requisitos, user, aportes, actividades):
         self.objeto = objeto
@@ -60,7 +61,6 @@ class Report:
         self.doc.addPageTemplates([vertical_template, horizontal_template])
         self._crear_contenido()
         self.doc.build(self.elements)
-
 
     def _agregar_titulo(self):
         title_style = ParagraphStyle(
@@ -366,7 +366,7 @@ class Report:
                 'SEMANA',
                 'CONTENIDOS',
                 'ACTIVIDADES',
-                '','', '', '', '',
+                '', '', '', '', '',
                 resultados_text,
                 evidencias_text
             ],
@@ -433,4 +433,5 @@ class Report:
         self.elements.append(NextPageTemplate('horizontal'))
         self._seccion_cronograma()
         self.elements.append(NextPageTemplate('vertical'))
-        self._seccion_anexos()
+        if self.objeto.anexos:
+            self._seccion_anexos()
