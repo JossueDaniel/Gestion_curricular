@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -10,6 +12,11 @@ class CustomUser(AbstractUser):
         ('part_time', 'Docente Tiempo Parcial'),
         ('guest', 'Docente Invitado')
     ]
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     formacion = models.TextField(null=True, blank=True)
     rol_academico = models.CharField(
         max_length=50,
