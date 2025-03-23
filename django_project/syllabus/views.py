@@ -13,14 +13,24 @@ from .models import Silabo, Aporte, Contenido
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
 from .report_pdf import Report
 
+
 # Create your views here.
-class HomePageView(LoginRequiredMixin, ListView):
+class DocenteSyllabusMixin:
+    def get_queryset(self):
+        return Silabo.objects.filter(
+            docente=self.request.user.id
+        ).distinct()
+
+
+class HomePageView(LoginRequiredMixin, DocenteSyllabusMixin, ListView):
     model = Silabo
     context_object_name = 'silabos'
     template_name = 'home.html'
 
     def get_queryset(self):
-        return Silabo.objects.filter(estado='aprobado')
+        queryset = super().get_queryset()
+
+        return queryset.filter(estado='aprobado')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -36,7 +46,7 @@ class HomePageView(LoginRequiredMixin, ListView):
         return context
 
 
-class SilaboListView(LoginRequiredMixin, ListView):
+class SilaboListView(LoginRequiredMixin, DocenteSyllabusMixin, ListView):
     model = Silabo
     context_object_name = 'silabos'
     template_name = 'syllabus/silabo_list.html'
