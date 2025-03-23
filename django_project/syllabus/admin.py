@@ -19,6 +19,9 @@ class SyllabusAdmin(admin.ModelAdmin):
     inlines = [AporteInLine, ContenidoInLine]
 
 
-admin.site.register(Contenido, ContenidoAdmin)
+admin.site.site_header = 'Panel de Administración UNIB.E'
+admin.site.site_title = 'UNIBE'
+admin.site.index_title = 'Bienvenido al panel de administración de la gestión curricular'
+
+
 admin.site.register(Silabo, SyllabusAdmin)
-admin.site.register(Aporte)

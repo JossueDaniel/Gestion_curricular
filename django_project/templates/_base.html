@@ -27,7 +27,6 @@
                             {% endif %}
                         </summary>
                         <ul class="bg-base-100 rounded-t-none p-2">
-                            <li><a href="{% url 'login' %}">Mi perfil</a></li>
                             <li>
                                 <form method="post" action="{% url 'logout' %}">
                                     {% csrf_token %}
