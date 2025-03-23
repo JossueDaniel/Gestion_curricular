@@ -1,7 +1,7 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.db import transaction
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, FormView, UpdateView, DeleteView
 from django.views.generic.detail import SingleObjectMixin
@@ -15,13 +15,22 @@ from .report_pdf import Report
 
 
 # Create your views here.
+"""
+Mixin para filtrar los syllabus que pertenecen al usuario de la sesión
+"""
 class DocenteSyllabusMixin:
     def get_queryset(self):
         return Silabo.objects.filter(
             docente=self.request.user.id
         ).distinct()
 
-
+class DocenteTestMixin(UserPassesTestMixin):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.docente == self.request.user
+"""
+Vista para mostrar los syllabus en el tablero de seguimiento
+"""
 class HomePageView(LoginRequiredMixin, DocenteSyllabusMixin, ListView):
     model = Silabo
     context_object_name = 'silabos'
@@ -29,7 +38,6 @@ class HomePageView(LoginRequiredMixin, DocenteSyllabusMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-
         return queryset.filter(estado='aprobado')
 
     def get_context_data(self, **kwargs):
@@ -95,6 +103,8 @@ def registrar_silabo(request):
 def editar_silabo(request, pk):
     silabo = get_object_or_404(Silabo, pk=pk)
 
+    if request.user != silabo.docente:
+        return HttpResponse('403 Forbidden')
     if request.method == 'POST':
         form = SilaboForm(request.POST, instance=silabo)
         # formset = AporteFormSet(request.POST, instance=silabo)
@@ -127,7 +137,7 @@ def editar_silabo(request, pk):
     })
 
 
-class SilaboDetailView(LoginRequiredMixin, DetailView):
+class SilaboDetailView(LoginRequiredMixin, DocenteTestMixin, DetailView):
     model = Silabo
     context_object_name = 'silabo'
     template_name = 'syllabus/silabo_detail.html'
@@ -140,7 +150,7 @@ class SilaboDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class ContenidoGet(DetailView):
+class ContenidoGet(DocenteTestMixin, DetailView):
     model = Silabo
     template_name = 'syllabus/contenido_list.html'
 
@@ -182,7 +192,7 @@ class ContenidoNewView(LoginRequiredMixin, View):
         return view(request, *args, **kwargs)
 
 
-class ContenidoUpdateView(LoginRequiredMixin, UpdateView):
+class ContenidoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Contenido
     form_class = ContenidoForm
     template_name = 'syllabus/contenido_update.html'
@@ -191,8 +201,12 @@ class ContenidoUpdateView(LoginRequiredMixin, UpdateView):
         syllabus_pk = self.object.syllabus.pk
         return reverse('contenido_list', kwargs={'pk': syllabus_pk})
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.syllabus.docente == self.request.user
 
-class ContenidoDeleteView(LoginRequiredMixin, DeleteView):
+
+class ContenidoDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Contenido
     template_name = 'syllabus/contenido_delete.html'
 
@@ -200,19 +214,26 @@ class ContenidoDeleteView(LoginRequiredMixin, DeleteView):
         silabo = self.object.syllabus.pk
         return reverse('contenido_list', kwargs={'pk': silabo})
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.syllabus.docente == self.request.user
 
-class ContenidoListView(ListView):
+
+class ContenidoListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Contenido
     context_object_name = 'contenidos'
     template_name = 'contenido/contenido_list_seguimiento.html'
 
-    def get_queryset(self):
-        silabo = self.kwargs.get('pk')
 
+    def get_queryset(self):
+        silabo_id = self.kwargs.get('pk')
+        silabo = get_object_or_404(Silabo, pk=silabo_id)
+        # if self.request.user != silabo.docente:
+        #     return None
         if silabo:
             return Contenido.objects.filter(syllabus=silabo).order_by('semana')
-        else:
-            return Contenido.objects.none()
+
+        return Contenido.objects.none()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -220,7 +241,13 @@ class ContenidoListView(ListView):
         context['silabo'] = get_object_or_404(Silabo, pk=silabo_id) if silabo_id else None
         return context
 
+    def test_func(self):
+        silabo_id = self.kwargs.get('pk')
+        silabo = Silabo.objects.get(pk=silabo_id)
+        return self.request.user == silabo.docente
 
+
+@login_required
 def registrar_completados(request, pk):
     silabo_id = get_object_or_404(Silabo, pk=pk)
     if request.method == 'POST':
@@ -235,8 +262,11 @@ def registrar_completados(request, pk):
 
     return redirect('contenido_list_tracking', pk=silabo_id.id)
 
+@login_required
 def generar_pdf(request, pk):
     silabo = Silabo.objects.get(pk=pk)
+    if request.user != silabo.docente:
+        return HttpResponseForbidden('403 forbidden')
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename=reporte_{silabo.asignatura.codigo}.pdf'
 
