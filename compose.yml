@@ -1,19 +1,19 @@
 services:
   db:
     image: postgres:latest
+    container_name: db
     restart: "no"
     volumes:
-      - ./data/db:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
   web:
     build: .
+    container_name: web
     command: python manage.py runserver 0.0.0.0:8000
     restart: "no"
     volumes:
-      - .:/code
+      - django_data:/code
     ports:
       - "8000:8000"
     environment:
@@ -24,3 +24,7 @@ services:
       - .env
     depends_on:
       - db
+
+volumes:
+  postgres_data:
+  django_data:
