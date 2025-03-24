@@ -1,9 +1,16 @@
+import uuid
+
 from django.db import models
 from django.urls import reverse
 
 
 # Create your models here.
 class Silabo(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False
+    )
     codigo = models.CharField(max_length=50, default='UNIB.E-CGC-FOR-05')
     fecha_creacion = models.DateField(auto_now_add=True)
     fecha_actualizacion = models.DateField(auto_now=True)
