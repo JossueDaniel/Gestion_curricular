@@ -3,12 +3,12 @@ from django.shortcuts import render, redirect
 from django.db import transaction
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView, FormView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, FormView, UpdateView, DeleteView, CreateView
 from django.views.generic.detail import SingleObjectMixin
 from django.views import View
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
-
+from django.contrib import messages
 from .models import Silabo, Aporte, Contenido
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
 from .report_pdf import Report
@@ -59,36 +59,38 @@ class SilaboListView(LoginRequiredMixin, DocenteSyllabusMixin, ListView):
     context_object_name = 'silabos'
     template_name = 'syllabus/silabo_list.html'
 
-
 @login_required
 def registrar_silabo(request):
     if request.method == 'POST':
         form = SilaboForm(request.POST, user=request.user.id)
+        formset = AporteFormSet(request.POST)
 
-        if form.is_valid():
+        if form.is_valid() and formset.is_valid():
             try:
                 with transaction.atomic():
                     silabo = form.save(commit=False)
                     silabo.docente = request.user
                     silabo.save()
-                    formset = AporteFormSet(request.POST, instance=silabo)
 
-                    if formset.is_valid():
-                        aportes = formset.save(commit=False)
+                    aportes = formset.save(commit=False)
+                    for i, aporte in enumerate(aportes, start=1):
+                        if not aporte.aporte:
+                            aporte.aporte = i
+                        aporte.syllabus = silabo
+                        aporte.save()
 
-                        for i, aporte in enumerate(aportes, start=1):
-                            if not aporte.aporte:
-                                aporte.aporte = i
-                            aporte.syllabus = silabo
-                            aporte.save()
+                messages.success(request, 'Sílabo registrado exitosamente.')
+                return redirect('silabo_list')
 
-                        return redirect('silabo_list')
-                    else:
-                        print(formset.errors)
             except Exception as e:
                 form.add_error(None, f"Error al registrar: {str(e)}")
         else:
-            formset = AporteFormSet(request.POST)
+            if not form.is_valid():
+                messages.error(request, 'Por favor, corrija los errores en el formulario.')
+
+            if not formset.is_valid():
+                messages.error(request, 'Por favor, corrija los errores en los aportes.')
+
     else:
         form = SilaboForm(user=request.user.id)
         formset = AporteFormSet()

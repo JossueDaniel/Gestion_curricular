@@ -14,7 +14,6 @@ from .views import (
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
     path('syllabus/', SilaboListView.as_view(), name='silabo_list'),
-
     path('syllabus/new/', views.registrar_silabo, name='silabo_new'),
     path('syllabus/<int:pk>/', SilaboDetailView.as_view(), name='silabo_detail'),
     path('syllabus/<int:pk>/report', views.generar_pdf, name='generar_pdf'),

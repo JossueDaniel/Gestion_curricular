@@ -9,7 +9,7 @@ class SilaboForm(forms.ModelForm):
     class Meta:
         model = Silabo
         fields = '__all__'
-        exclude = ['docente']
+        exclude = ['docente', 'estado']
         widgets = {
             'codigo': forms.TextInput(attrs={
                 'class': 'form-input rounded-md',
