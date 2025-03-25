@@ -9,6 +9,8 @@ from django.views import View
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from uuid import UUID
+
 from .models import Silabo, Aporte, Contenido
 from .forms import SilaboForm, AporteFormSet, ContenidoForm
 from .report_pdf import Report

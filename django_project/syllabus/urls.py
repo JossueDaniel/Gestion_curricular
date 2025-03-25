@@ -20,8 +20,8 @@ urlpatterns = [
     path('syllabus/<uuid:pk>/edit/', views.editar_silabo, name='silabo_update'),
     path('syllabus/<uuid:pk>/contenido/new/', ContenidoNewView.as_view(), name='contenido_new'),
     path('syllabus/<uuid:pk>/contenido/', ContenidoNewView.as_view(), name='contenido_list'),
-    path('syllabus/<uuid:pk>/contenido/edit/', ContenidoUpdateView.as_view(), name='contenido_update'),
-    path('syllabus/<uuid:pk>/contenido/delete/', ContenidoDeleteView.as_view(), name='contenido_delete'),
+    path('syllabus/<int:pk>/contenido/edit/', ContenidoUpdateView.as_view(), name='contenido_update'),
+    path('syllabus/<int:pk>/contenido/delete/', ContenidoDeleteView.as_view(), name='contenido_delete'),
     path('syllabus/seguimiento/<uuid:pk>/', ContenidoListView.as_view(), name='contenido_list_tracking'),
     path('syllabus/seguimiento/<uuid:pk>/registrar/contenido/', views.registrar_completados, name='guardar_completados'),
 ]
